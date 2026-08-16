@@ -1,0 +1,39 @@
+# dependencies
+app/node_modules
+app/.pnp
+app/.pnp.*
+
+# next.js
+app/.next/
+app/out/
+
+# production
+app/build
+
+# env files
+.env
+.env*.local
+app/.env
+app/.env*.local
+
+# local tooling
+.claude/
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+~$*.docx
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# vercel
+app/.vercel
+
+# typescript
+app/*.tsbuildinfo
+app/next-env.d.ts
