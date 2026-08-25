@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/styles.css">
+  <script src="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/_ds_bundle.js"></script>
+  <script src="./kit/image-slot.js"></script>
+  <style>
+    body { margin: 0; }
+    a { color: var(--accent-gold-strong); }
+    a:hover { color: var(--accent-gold); }
+  </style>
+</helmet>
+
+<div style="position:sticky;top:0;z-index:200;background:#1a1816;color:#fff;display:flex;align-items:center;gap:20px;padding:10px 20px;font-family:system-ui,sans-serif;font-size:12px;flex-wrap:wrap">
+  <span style="opacity:0.5;text-transform:uppercase;letter-spacing:0.08em;font-size:10px;flex-shrink:0">Прототип v2</span>
+  <div style="display:flex;gap:4px;flex-wrap:wrap">
+    <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+      <button onClick="{{ item.onClick }}" style="{{ item.tabStyle }}">{{ item.label }}</button>
+    </sc-for>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:4px;align-items:center">
+    <span style="opacity:0.5;font-size:10px;text-transform:uppercase">Устройство</span>
+    <button onClick="{{ setDesktop }}" style="{{ desktopBtnStyle }}">Десктоп</button>
+    <button onClick="{{ setMobile }}" style="{{ mobileBtnStyle }}">Мобильный</button>
+  </div>
+</div>
+
+<div style="{{ frameStyle }}">
+  <div style="{{ headerWrapStyle }}">
+    <x-import component-from-global-scope="Header" from="./kit/Header.jsx" onNavigate="{{ navigate }}" cartCount="{{ cartCount }}" onOpenCart="{{ goToCart }}" transparent="{{ isHome }}" mobile="{{ isMobile }}" categories="{{ categories }}" hint-size="100%,76px"></x-import>
+  </div>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <x-import component-from-global-scope="Homepage" from="./kit/Homepage.jsx" onNavigate="{{ navigate }}" mobile="{{ isMobile }}" categories="{{ categories }}" products="{{ products }}" hint-size="100%,1600px"></x-import>
+  </sc-if>
+
+  <sc-if value="{{ isCatalog }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="Catalog" from="./kit/Catalog.jsx" initialCategory="{{ category }}" onNavigate="{{ navigate }}" mobile="{{ isMobile }}" categories="{{ categories }}" products="{{ products }}" hint-size="100%,1100px"></x-import>
+  </sc-if>
+
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="ProductDetail" from="./kit/ProductDetail.jsx" productId="{{ productId }}" onNavigate="{{ navigate }}" onAddToCart="{{ addToCart }}" mobile="{{ isMobile }}" products="{{ products }}" hint-size="100%,950px"></x-import>
+  </sc-if>
+
+  <sc-if value="{{ isCart }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:var(--container-max);margin:0 auto;padding:var(--space-6) var(--gutter) var(--space-9)">
+      <h1 style="font-family:var(--font-display);font-size:var(--text-display-lg);color:var(--text-primary);margin:0 0 24px">Корзина</h1>
+
+      <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{ true }}">
+        <div style="{{ cartGridStyle }}">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ cartLines }}" as="line" hint-placeholder-count="2">
+              <div style="display:flex;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--border-subtle);flex-wrap:wrap">
+                <div style="width:72px;height:72px;background:var(--surface-sunken);border-radius:var(--radius-md);flex-shrink:0"></div>
+                <div style="flex:1;min-width:160px">
+                  <div style="font-family:var(--font-body);font-size:var(--text-caption);letter-spacing:var(--tracking-wide);color:var(--text-muted);text-transform:uppercase;margin-bottom:4px">{{ line.product.category }}</div>
+                  <div style="font-family:var(--font-body);font-size:var(--text-body-md);color:var(--text-primary);margin-bottom:8px">{{ line.product.name }}</div>
+                  <a onClick="{{ line.onRemove }}" style="font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--text-muted);cursor:pointer;text-decoration:underline">Удалить</a>
+                </div>
+                <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.QuantityStepper" value="{{ line.qty }}" onChange="{{ line.onQtyChange }}" max="{{ line.product.stock }}" hint-size="100px,32px"></x-import>
+                <div style="width:100px;text-align:right;font-family:var(--font-display);font-size:var(--text-body-lg);color:var(--text-primary)">{{ line.lineTotal }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <aside style="background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:24px;height:fit-content;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--text-secondary)"><span>Товары</span><span>{{ subtotal }}</span></div>
+            <sc-if value="{{ promoApplied }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:space-between;font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--accent-gold-strong)"><span>Скидка по промокоду</span><span>−{{ discount }}</span></div>
+            </sc-if>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1"><x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Промокод" value="{{ promo }}" onChange="{{ onPromoChange }}" hint-size="100%,44px"></x-import></div>
+              <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Button" variant="secondary" onClick="{{ applyPromo }}" hint-size="90px,44px">Применить</x-import>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border-subtle);font-family:var(--font-display);font-size:var(--text-display-sm);color:var(--text-primary)"><span>Итого</span><span>{{ total }}</span></div>
+            <div style="font-family:var(--font-body);font-size:var(--text-caption);color:var(--text-muted)">+{{ loyaltyPoints }} бонусов на карту лояльности</div>
+            <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Button" variant="primary" size="lg" onClick="{{ goToCheckout }}" hint-size="100%,52px">Оформить заказ</x-import>
+          </aside>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ emptyCart }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:80px 0;font-family:var(--font-body);color:var(--text-muted)">
+          <p style="margin-bottom:24px">Корзина пуста</p>
+          <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Button" variant="primary" onClick="{{ goCatalog }}" hint-size="200px,48px">В каталог</x-import>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:var(--container-max);margin:0 auto;padding:var(--space-6) var(--gutter) var(--space-9)">
+      <h1 style="font-family:var(--font-display);font-size:var(--text-display-lg);color:var(--text-primary);margin:0 0 32px">Оформление заказа</h1>
+
+      <sc-if value="{{ orderPlaced }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:48px;text-align:center;max-width:520px;margin:0 auto">
+          <div style="font-family:var(--font-body);font-size:var(--text-caption);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px">Спасибо за заказ</div>
+          <h2 style="font-family:var(--font-display);font-size:var(--text-display-md);margin:0 0 12px">Заказ №{{ orderNumber }} принят</h2>
+          <p style="font-family:var(--font-body);color:var(--text-secondary);margin:0 0 24px">Мы свяжемся с вами для подтверждения. Начислено {{ loyaltyPoints }} бонусов.</p>
+          <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Button" variant="primary" onClick="{{ goHome }}" hint-size="200px,48px">На главную</x-import>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ notOrderPlaced }}" hint-placeholder-val="{{ true }}">
+        <div style="{{ checkoutGridStyle }}">
+          <div style="display:flex;flex-direction:column;gap:32px">
+            <section>
+              <div style="font-family:var(--font-body);font-size:var(--text-caption);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-secondary);margin-bottom:16px">Способ получения</div>
+              <div style="display:flex;gap:24px">
+                <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Radio" name="delivery" label="Самовывоз" checked="{{ isPickup }}" onChange="{{ selectPickup }}" hint-size="auto,24px"></x-import>
+                <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Radio" name="delivery" label="Доставка" checked="{{ isDelivery }}" onChange="{{ selectDelivery }}" hint-size="auto,24px"></x-import>
+              </div>
+            </section>
+            <section style="display:flex;flex-direction:column;gap:16px">
+              <div style="font-family:var(--font-body);font-size:var(--text-caption);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-secondary)">Контактные данные</div>
+              <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Имя и фамилия" value="{{ name }}" onChange="{{ onNameChange }}" hint-size="100%,44px"></x-import>
+              <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Телефон" value="{{ phone }}" onChange="{{ onPhoneChange }}" hint-size="100%,44px"></x-import>
+              <sc-if value="{{ isDelivery }}" hint-placeholder-val="{{ false }}">
+                <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Адрес доставки" value="{{ address }}" onChange="{{ onAddressChange }}" hint-size="100%,44px"></x-import>
+              </sc-if>
+            </section>
+            <section>
+              <div style="font-family:var(--font-body);font-size:var(--text-caption);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-secondary);margin-bottom:16px">Оплата</div>
+              <div style="display:flex;gap:24px;flex-wrap:wrap">
+                <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Radio" name="payment" label="Картой онлайн" checked="{{ isPayCard }}" onChange="{{ selectPayCard }}" hint-size="auto,24px"></x-import>
+                <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Radio" name="payment" label="Наличными при получении" checked="{{ isPayCash }}" onChange="{{ selectPayCash }}" hint-size="auto,24px"></x-import>
+              </div>
+            </section>
+          </div>
+          <aside style="background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:24px;height:fit-content;display:flex;flex-direction:column;gap:16px">
+            <div style="font-family:var(--font-display);font-size:var(--text-display-sm);margin-bottom:4px">Ваш заказ</div>
+            <sc-for list="{{ cartLines }}" as="line" hint-placeholder-count="2">
+              <div style="display:flex;justify-content:space-between;gap:12px;font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--text-secondary)">
+                <span>{{ line.product.name }} × {{ line.qty }}</span><span style="white-space:nowrap">{{ line.lineTotal }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border-subtle);font-family:var(--font-display);font-size:var(--text-display-sm)"><span>Итого</span><span>{{ total }}</span></div>
+            <div style="font-family:var(--font-body);font-size:var(--text-caption);color:var(--text-muted)">+{{ loyaltyPoints }} бонусов после оплаты</div>
+            <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Button" variant="primary" size="lg" onClick="{{ placeOrder }}" hint-size="100%,52px">Подтвердить заказ</x-import>
+          </aside>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isAccount }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:var(--container-max);margin:0 auto;padding:var(--space-6) var(--gutter) var(--space-9)">
+      <h1 style="font-family:var(--font-display);font-size:var(--text-display-lg);color:var(--text-primary);margin:0 0 24px">Личный кабинет</h1>
+      <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Tabs" tabs="{{ accountTabs }}" active="{{ accountTab }}" onChange="{{ setAccountTab }}" hint-size="100%,44px"></x-import>
+      <div style="padding-top:32px">
+        <sc-if value="{{ isOrdersTab }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ orders }}" as="order" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:20px 24px;flex-wrap:wrap;gap:12px">
+                <div>
+                  <div style="font-family:var(--font-body);font-size:var(--text-body-md);color:var(--text-primary);margin-bottom:4px">Заказ №{{ order.id }}</div>
+                  <div style="font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--text-muted)">{{ order.date }} · {{ order.itemsLabel }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:24px">
+                  <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Badge" tone="{{ order.tone }}" hint-size="auto,24px">{{ order.status }}</x-import>
+                  <div style="font-family:var(--font-display);font-size:var(--text-body-lg);color:var(--text-primary);min-width:100px;text-align:right">{{ order.total }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isProfileTab }}" hint-placeholder-val="{{ false }}">
+          <div style="max-width:420px;display:flex;flex-direction:column;gap:16px">
+            <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Имя и фамилия" value="{{ profileName }}" onChange="{{ onProfileNameChange }}" hint-size="100%,44px"></x-import>
+            <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Телефон" value="{{ profilePhone }}" onChange="{{ onProfilePhoneChange }}" hint-size="100%,44px"></x-import>
+            <x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Input" placeholder="Email" value="{{ profileEmail }}" onChange="{{ onProfileEmailChange }}" hint-size="100%,44px"></x-import>
+            <div><x-import component-from-global-scope="ContrastDesignSystem_ef7d27.Button" variant="secondary" hint-size="160px,44px">Сохранить</x-import></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isLoyaltyTab }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ loyaltyGridStyle }}">
+            <div style="background:var(--surface-hero);color:var(--text-on-dark);border-radius:var(--radius-lg);padding:32px;display:flex;flex-direction:column;gap:8px">
+              <div style="font-family:var(--font-body);font-size:var(--text-caption);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--accent-gold)">Уровень Gold</div>
+              <div style="font-family:var(--font-display);font-size:var(--text-display-xl)">{{ loyaltyBalance }} бонусов</div>
+              <div style="font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--text-on-dark-muted)">1 бонус = 1 ₸ при оплате заказа</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:24px;font-family:var(--font-body);font-size:var(--text-body-sm);color:var(--text-secondary);line-height:var(--leading-normal)">
+              <p style="margin:0 0 12px">До уровня Platinum осталось 8 400 ₸ покупок.</p>
+              <p style="margin:0">5% от каждой покупки возвращается бонусами и не сгорает.</p>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showFooter }}" hint-placeholder-val="{{ true }}">
+    <x-import component-from-global-scope="Footer" from="./kit/Homepage.jsx" hint-size="100%,140px"></x-import>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;device&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;desktop&quot;, &quot;options&quot;: [&quot;desktop&quot;, &quot;mobile&quot;], &quot;tsType&quot;: &quot;string&quot;}, &quot;seedCart&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}}">
+function parsePrice(str) { return parseInt(String(str).replace(/[^\d]/g, ""), 10) || 0; }
+function formatPrice(n) { return n.toLocaleString("ru-RU") + " \u20B8"; }
+
+const CATEGORIES = [
+  { id: "hookahs", label: "Кальяны" },
+  { id: "steam", label: "Бестабачные смеси" },
+  { id: "tobacco", label: "Табачные смеси" },
+  { id: "coal", label: "Угли и мундштуки" },
+  { id: "bowls", label: "Чаши" },
+  { id: "vases", label: "Колбы" },
+  { id: "accessories", label: "Аксессуары" },
+  { id: "cigars", label: "Сигары, трубки, зажигалки" },
+];
+const PRODUCTS = [
+  { id: 1, category: "Кальяны", name: "Amy Deluxe 650, чёрный", price: "32 000 ₸", oldPrice: "38 000 ₸", stock: 5, brand: "Amy Deluxe" },
+  { id: 2, category: "Кальяны", name: "Khalil Mamoon, классический", price: "45 000 ₸", stock: 2, brand: "Khalil Mamoon" },
+  { id: 3, category: "Бестабачные смеси", name: "Chabacco Strong, мохито, 50 г", price: "3 900 ₸", stock: 12, flavor: "Мохито", brand: "Chabacco" },
+  { id: 4, category: "Бестабачные смеси", name: "MustHave Nasteam, дыня, 50 г", price: "3 600 ₸", stock: 4, flavor: "Дыня", brand: "MustHave" },
+  { id: 5, category: "Табачные смеси", name: "Al Fakher, двойное яблоко, 50 г", price: "4 500 ₸", stock: 3, flavor: "Яблоко", brand: "Al Fakher" },
+  { id: 6, category: "Табачные смеси", name: "Adalya, мята, 50 г", price: "4 200 ₸", stock: 14, flavor: "Мята", brand: "Adalya" },
+  { id: 7, category: "Табачные смеси", name: "Fumari, виноград, 100 г", price: "7 900 ₸", stock: 1, flavor: "Виноград", brand: "Fumari" },
+  { id: 8, category: "Табачные смеси", name: "Al Fakher, мохито, 50 г", price: "4 500 ₸", stock: 9, flavor: "Мохито", brand: "Al Fakher" },
+  { id: 9, category: "Угли и мундштуки", name: "Cocobrico, кокосовый, 1 кг", price: "3 800 ₸", stock: 21, brand: "Cocobrico" },
+  { id: 10, category: "Угли и мундштуки", name: "Три Кита, быстроразжигаемый", price: "2 900 ₸", stock: 30, brand: "Три Кита" },
+  { id: 11, category: "Угли и мундштуки", name: "Персональный мундштук, сталь", price: "5 200 ₸", stock: 17, brand: "Contrast" },
+  { id: 12, category: "Чаши", name: "Чаша Kaloud Phunnel, глина", price: "6 500 ₸", stock: 8, brand: "Kaloud" },
+  { id: 13, category: "Колбы", name: "Колба Aladin, прозрачное стекло", price: "9 800 ₸", stock: 6, brand: "Aladin" },
+  { id: 14, category: "Аксессуары", name: "Щипцы для угля, сталь", price: "3 200 ₸", stock: 25, brand: "Contrast" },
+  { id: 15, category: "Аксессуары", name: "Коврик для угля, силикон", price: "2 400 ₸", stock: 19, brand: "Contrast" },
+  { id: 16, category: "Сигары, трубки, зажигалки", name: "Zippo, зажигалка классическая", price: "18 500 ₸", stock: 7, brand: "Zippo" },
+  { id: 17, category: "Сигары, трубки, зажигалки", name: "Трубочный табак Amphora, ваниль", price: "6 900 ₸", stock: 4, brand: "Amphora" },
+];
+window.ICON = (name) => `https://unpkg.com/lucide-static@0.462.0/icons/${name}.svg`;
+
+const NAV = [
+  { id: "home", label: "Главная" },
+  { id: "catalog", label: "Каталог" },
+  { id: "product", label: "Товар" },
+  { id: "cart", label: "Корзина" },
+  { id: "checkout", label: "Оформление" },
+  { id: "account", label: "Кабинет" },
+];
+
+const ORDERS = [
+  { id: 1042, date: "18 авг 2026", itemsLabel: "3 товара", status: "Доставлен", tone: "success", total: "24 300 ₸" },
+  { id: 1039, date: "9 авг 2026", itemsLabel: "1 товар", status: "В пути", tone: "gold", total: "45 000 ₸" },
+  { id: 1031, date: "27 июл 2026", itemsLabel: "2 товара", status: "Обрабатывается", tone: "neutral", total: "8 100 ₸" },
+];
+
+class Component extends DCLogic {
+  state = {
+    page: "home",
+    category: null,
+    productId: null,
+    device: this.props.device || "desktop",
+    cart: this.props.seedCart === false ? [] : [{ productId: 1, qty: 1 }, { productId: 9, qty: 2 }],
+    promo: "",
+    promoApplied: false,
+    delivery: "pickup",
+    payment: "card",
+    name: "",
+    phone: "",
+    address: "",
+    orderPlaced: false,
+    accountTab: "orders",
+    profileName: "Айгерим Сериковна",
+    profilePhone: "+7 701 234 5678",
+    profileEmail: "aigerim@example.kz",
+  };
+
+  navigate = (page, arg) => {
+    if (page === "catalog") this.setState({ page, category: arg || null });
+    else if (page === "product") this.setState({ page, productId: typeof arg === "number" ? arg : PRODUCTS[0].id });
+    else this.setState({ page });
+    window.scrollTo(0, 0);
+  };
+
+  selectNav = (id) => {
+    if (id === "product" && this.state.productId == null) this.setState({ page: id, productId: PRODUCTS[0].id });
+    else this.setState({ page: id });
+    window.scrollTo(0, 0);
+  };
+
+  addToCart = (product, qty) => {
+    this.setState((s) => {
+      const existing = s.cart.find((i) => i.productId === product.id);
+      const cart = existing
+        ? s.cart.map((i) => (i.productId === product.id ? { ...i, qty: i.qty + qty } : i))
+        : [...s.cart, { productId: product.id, qty }];
+      return { cart, page: "cart" };
+    });
+    window.scrollTo(0, 0);
+  };
+
+  renderVals() {
+    const s = this.state;
+    const isMobile = s.device === "mobile";
+    const cartLines = s.cart
+      .map((i) => ({ ...i, product: PRODUCTS.find((p) => p.id === i.productId) }))
+      .filter((l) => l.product)
+      .map((l) => ({
+        ...l,
+        lineTotal: formatPrice(parsePrice(l.product.price) * l.qty),
+        onQtyChange: (v) => this.setState((st) => ({ cart: st.cart.map((i) => (i.productId === l.productId ? { ...i, qty: v } : i)) })),
+        onRemove: () => this.setState((st) => ({ cart: st.cart.filter((i) => i.productId !== l.productId) })),
+      }));
+    const subtotal = cartLines.reduce((sum, l) => sum + parsePrice(l.product.price) * l.qty, 0);
+    const discount = s.promoApplied ? Math.round(subtotal * 0.1) : 0;
+    const total = subtotal - discount;
+    const loyaltyPoints = Math.round(total * 0.05);
+    const activeTabColor = "#fff";
+
+    const tabStyleFor = (active) => ({
+      background: active ? "#fff" : "transparent",
+      color: active ? "#1a1816" : "rgba(255,255,255,0.75)",
+      border: "none", borderRadius: "999px", padding: "6px 14px", fontSize: 12,
+      fontFamily: "system-ui,sans-serif", cursor: "pointer",
+    });
+    const deviceBtnStyle = (active) => ({
+      background: active ? "#fff" : "transparent",
+      color: active ? "#1a1816" : "rgba(255,255,255,0.75)",
+      border: "1px solid rgba(255,255,255,0.25)", borderRadius: "999px", padding: "5px 12px", fontSize: 11,
+      fontFamily: "system-ui,sans-serif", cursor: "pointer",
+    });
+
+    return {
+      categories: CATEGORIES,
+      products: PRODUCTS,
+      navItems: NAV.map((n) => ({ ...n, tabStyle: tabStyleFor(s.page === n.id), onClick: () => this.selectNav(n.id) })),
+      setDesktop: () => this.setState({ device: "desktop" }),
+      setMobile: () => this.setState({ device: "mobile" }),
+      desktopBtnStyle: deviceBtnStyle(!isMobile),
+      mobileBtnStyle: deviceBtnStyle(isMobile),
+      isMobile,
+      frameStyle: isMobile
+        ? { maxWidth: 430, margin: "0 auto", background: "var(--surface-page)", minHeight: "calc(100vh - 45px)", boxShadow: "0 0 0 1px var(--border-subtle)", position: "relative" }
+        : { background: "var(--surface-page)", minHeight: "calc(100vh - 45px)", position: "relative" },
+      headerWrapStyle: s.page === "home" ? { position: "absolute", top: 0, left: 0, right: 0, zIndex: 50 } : { position: "static" },
+      isHome: s.page === "home",
+      isCatalog: s.page === "catalog",
+      isProduct: s.page === "product",
+      isCart: s.page === "cart",
+      isCheckout: s.page === "checkout",
+      isAccount: s.page === "account",
+      showFooter: s.page !== "home",
+      category: s.category,
+      productId: s.productId,
+      navigate: this.navigate,
+      goToCart: () => this.navigate("cart"),
+      goCatalog: () => this.navigate("catalog"),
+      goToCheckout: () => this.navigate("checkout"),
+      goHome: () => this.setState({ page: "home", orderPlaced: false, cart: [] }),
+      addToCart: this.addToCart,
+      cartCount: cartLines.reduce((sum, l) => sum + l.qty, 0),
+      cartLines,
+      hasCartItems: cartLines.length > 0,
+      emptyCart: cartLines.length === 0,
+      subtotal: formatPrice(subtotal),
+      discount: formatPrice(discount),
+      total: formatPrice(total),
+      loyaltyPoints,
+      promo: s.promo,
+      promoApplied: s.promoApplied,
+      onPromoChange: (e) => this.setState({ promo: e.target.value }),
+      applyPromo: () => this.setState({ promoApplied: true }),
+      cartGridStyle: isMobile ? { display: "flex", flexDirection: "column", gap: 24 } : { display: "grid", gridTemplateColumns: "1fr 360px", gap: 40 },
+      checkoutGridStyle: isMobile ? { display: "flex", flexDirection: "column", gap: 24 } : { display: "grid", gridTemplateColumns: "1fr 360px", gap: 40 },
+      loyaltyGridStyle: isMobile ? { display: "flex", flexDirection: "column", gap: 20 } : { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 },
+      isPickup: s.delivery === "pickup",
+      isDelivery: s.delivery === "delivery",
+      selectPickup: () => this.setState({ delivery: "pickup" }),
+      selectDelivery: () => this.setState({ delivery: "delivery" }),
+      isPayCard: s.payment === "card",
+      isPayCash: s.payment === "cash",
+      selectPayCard: () => this.setState({ payment: "card" }),
+      selectPayCash: () => this.setState({ payment: "cash" }),
+      name: s.name,
+      phone: s.phone,
+      address: s.address,
+      onNameChange: (e) => this.setState({ name: e.target.value }),
+      onPhoneChange: (e) => this.setState({ phone: e.target.value }),
+      onAddressChange: (e) => this.setState({ address: e.target.value }),
+      orderPlaced: s.orderPlaced,
+      notOrderPlaced: !s.orderPlaced,
+      orderNumber: 1043,
+      placeOrder: () => this.setState({ orderPlaced: true }),
+      accountTabs: [{ id: "orders", label: "Заказы" }, { id: "profile", label: "Профиль" }, { id: "loyalty", label: "Программа лояльности" }],
+      accountTab: s.accountTab,
+      setAccountTab: (id) => this.setState({ accountTab: id }),
+      isOrdersTab: s.accountTab === "orders",
+      isProfileTab: s.accountTab === "profile",
+      isLoyaltyTab: s.accountTab === "loyalty",
+      orders: ORDERS,
+      profileName: s.profileName,
+      profilePhone: s.profilePhone,
+      profileEmail: s.profileEmail,
+      onProfileNameChange: (e) => this.setState({ profileName: e.target.value }),
+      onProfilePhoneChange: (e) => this.setState({ profilePhone: e.target.value }),
+      onProfileEmailChange: (e) => this.setState({ profileEmail: e.target.value }),
+      loyaltyBalance: "1 260",
+    };
+  }
+}
+
+</script>
+</body>
+</html>

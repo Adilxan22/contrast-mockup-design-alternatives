@@ -1,0 +1,15 @@
+:root{
+--shadow-sm:0 1px 2px rgba(16,14,11,0.08);
+--shadow-md:0 4px 16px rgba(16,14,11,0.10);
+--shadow-lg:0 16px 40px rgba(16,14,11,0.14);
+--shadow-inset-gold:inset 0 0 0 1px var(--gold-500);
+
+--ease-standard:cubic-bezier(0.2,0.6,0.2,1); /* @kind other */
+--duration-fast:120ms; /* @kind other */
+--duration-base:200ms; /* @kind other */
+--duration-slow:360ms; /* @kind other */
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font-family:var(--font-body);}
+a{color:var(--text-accent);text-decoration:none}
+a:hover{color:var(--accent-gold-strong);text-decoration:underline}

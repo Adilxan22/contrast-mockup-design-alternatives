@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/styles.css">
+  <script src="_ds/contrast-design-system-ef7d2799-8508-4d45-9a24-97db2f3dab3c/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; background: #23201c; }
+    a { color: var(--accent-gold-soft); }
+    a:hover { color: var(--accent-gold); }
+  </style>
+</helmet>
+
+<section style="padding:56px 48px 110px;font-family:var(--font-body)">
+  <header style="max-width:880px;margin:0 0 52px">
+    <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:14px">Contrast · альтернативные направления</div>
+    <h1 style="font-family:var(--font-display);font-size:52px;line-height:1.05;color:#fbf9f4;margin:0 0 18px;font-weight:400">Два альтернативных направления</h1>
+    <p style="font-size:16px;line-height:1.65;color:rgba(251,249,244,0.7);margin:0;text-wrap:pretty">Общая база — палитра, взятая из логотипа, и пара Cormorant + Jost. Это шрифты и цвета бренда, поэтому от варианта к варианту они не меняются; меняется то, что решает бриф — плотность каталога и устройство навигации. Если нужно расходиться и по типографике, скажу сразу: это возможно, соберу третий вариант с другой парой шрифтов. Показаны три ключевых экрана каждого варианта в десктопе и мобайле; выбранное направление раскатывается на все шесть страниц.</p>
+  </header>
+
+  <div style="display:flex;gap:56px;align-items:flex-start;flex-wrap:wrap">
+
+    <div id="1a" style="flex-shrink:0">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.1em;background:var(--accent-gold);color:#17140f;padding:4px 9px;border-radius:2px">1A</span>
+        <h2 style="font-family:var(--font-display);font-size:32px;color:#fbf9f4;margin:0;font-weight:400">Витрина</h2>
+      </div>
+      <p style="font-size:14px;line-height:1.6;color:rgba(251,249,244,0.6);margin:0 0 24px;max-width:620px">Плотный каталог, навигация вверху. Поиск и категории всегда на виду, фильтры — горизонтальной панелью над сеткой. Четыре товара в ряд, компактные карточки. Атмосферу даёт узкая тёмная полоса и одна фотография, а не тёмный экран.</p>
+
+      <div style="display:flex;gap:32px;align-items:flex-start">
+        <div style="width:1280px;flex-shrink:0;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.45)">
+
+          <div style="background:var(--surface-hero);padding:10px 40px;display:flex;justify-content:space-between;font-size:12px;color:rgba(251,249,244,0.72);letter-spacing:0.03em">
+            <span>Астана, ул. Кабанбай батыра 15 · ежедневно 10:00–02:00</span>
+            <span style="color:var(--accent-gold-soft)">Доставка по городу от 25 000 ₸ — бесплатно</span>
+          </div>
+          <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:16px 40px;display:flex;align-items:center;gap:28px">
+            <div style="font-size:18px;letter-spacing:0.3em;color:var(--text-primary);flex-shrink:0">CONTRAST</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border-strong);border-radius:2px;padding:11px 16px;font-size:14px;color:var(--text-muted)"><span>Поиск по каталогу</span><span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-secondary)">Найти</span></div>
+            <div style="display:flex;gap:22px;font-size:13px;color:var(--text-secondary);flex-shrink:0"><span>Кабинет</span><span style="color:var(--text-primary)">Корзина · 2</span></div>
+          </div>
+          <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:13px 40px;display:flex;gap:24px;font-size:13px;color:var(--text-secondary)">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="8"><span style="flex-shrink:0;white-space:nowrap">{{ c }}</span></sc-for>
+          </div>
+
+          <div style="padding:28px 40px 0;display:grid;grid-template-columns:1.62fr 1fr;gap:20px">
+            <div style="position:relative;min-height:340px;overflow:hidden;border-radius:4px;background:var(--surface-hero)">
+              <img src="assets/storefront-sign.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.62">
+              <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(16,14,11,0.9) 0%, rgba(16,14,11,0.45) 65%, rgba(16,14,11,0.2) 100%)"></div>
+              <div style="position:relative;padding:44px 40px;max-width:430px">
+                <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:16px">Premium hookah shop</div>
+                <div style="font-family:var(--font-display);font-size:44px;line-height:1.08;color:#fbf9f4;margin-bottom:16px">Всё для кальяна в одном месте</div>
+                <p style="font-size:14px;line-height:1.6;color:rgba(251,249,244,0.72);margin:0 0 26px">1 400 позиций в наличии. Забрать сегодня или получить доставкой.</p>
+                <div style="display:inline-block;background:#fbf9f4;color:#17140f;font-size:13px;padding:13px 28px;border-radius:2px">В каталог</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
+              <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:4px;padding:24px;display:flex;flex-direction:column;justify-content:space-between">
+                <div>
+                  <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:10px">Новинки недели</div>
+                  <div style="font-family:var(--font-display);font-size:25px;color:var(--text-primary);line-height:1.2">18 новых вкусов Al Fakher и Adalya</div>
+                </div>
+                <div style="font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border-subtle);padding-top:14px">Смотреть →</div>
+              </div>
+              <div style="background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:4px;padding:24px;display:flex;flex-direction:column;justify-content:space-between">
+                <div>
+                  <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">Карта Contrast</div>
+                  <div style="font-family:var(--font-display);font-size:25px;color:var(--text-primary);line-height:1.2">5% бонусами с каждой покупки</div>
+                </div>
+                <div style="font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border-subtle);padding-top:14px">Условия →</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:44px 40px 0">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px">
+              <h3 style="font-family:var(--font-display);font-size:28px;color:var(--text-primary);margin:0;font-weight:400">Табачные смеси</h3>
+              <span style="font-size:13px;color:var(--text-muted)">128 товаров</span>
+            </div>
+            <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:4px;padding:14px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px">
+              <sc-for list="{{ filterChips }}" as="f" hint-placeholder-count="6">
+                <span style="{{ f.style }}">{{ f.label }}</span>
+              </sc-for>
+              <span style="margin-left:auto;font-size:13px;color:var(--text-secondary);white-space:nowrap">Сначала популярные ⌄</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+              <sc-for list="{{ dense }}" as="p" hint-placeholder-count="8">
+                <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:4px;overflow:hidden">
+                  <div style="width:100%;height:170px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center"><span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+                  <div style="padding:14px 16px 16px">
+                    <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px">{{ p.brand }}</div>
+                    <div style="font-size:14px;line-height:1.35;color:var(--text-primary);margin-bottom:12px;height:38px;overflow:hidden">{{ p.name }}</div>
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+                      <span style="font-family:var(--font-display);font-size:20px;color:var(--text-primary)">{{ p.price }}</span>
+                      <span style="font-size:11px;color:{{ p.stockColor }}">осталось {{ p.stock }}</span>
+                    </div>
+                    <div style="border:1px solid var(--action-secondary-border);color:var(--action-secondary-fg);font-size:12px;padding:9px;text-align:center;border-radius:2px">В корзину</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:52px 40px 56px">
+            <div style="height:1px;background:var(--border-subtle);margin-bottom:44px"></div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:22px">Каталог / Кальяны / Amy Deluxe 650</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start">
+              <div style="display:grid;grid-template-columns:76px 1fr;gap:12px">
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  <div style="width:76px;height:76px;background:var(--surface-sunken);border:1px solid var(--border-strong)"></div>
+                  <div style="width:76px;height:76px;background:var(--surface-sunken);border:1px solid var(--border-subtle)"></div>
+                  <div style="width:76px;height:76px;background:var(--surface-sunken);border:1px solid var(--border-subtle)"></div>
+                </div>
+                <div style="width:100%;height:400px;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center"><span style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+              </div>
+              <div>
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">Amy Deluxe · Германия</div>
+                <h4 style="font-family:var(--font-display);font-size:36px;line-height:1.12;color:var(--text-primary);margin:0 0 20px;font-weight:400">Amy Deluxe 650, чёрный</h4>
+                <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px">
+                  <span style="font-family:var(--font-display);font-size:34px;color:var(--text-primary)">32 000 ₸</span>
+                  <span style="font-size:16px;color:var(--text-muted);text-decoration:line-through">38 000 ₸</span>
+                  <span style="font-size:11px;background:var(--state-danger);color:#fbf9f4;padding:3px 8px;border-radius:999px">−16%</span>
+                </div>
+                <div style="font-size:13px;color:var(--state-success);margin-bottom:24px">В наличии · осталось 5</div>
+                <div style="display:flex;gap:12px;margin-bottom:28px">
+                  <div style="display:flex;align-items:center;border:1px solid var(--border-subtle);border-radius:2px;background:#fff"><span style="padding:0 15px;color:var(--text-secondary)">−</span><span style="padding:0 4px;font-size:15px">1</span><span style="padding:0 15px;color:var(--text-secondary)">+</span></div>
+                  <div style="flex:1;background:var(--action-primary-bg);color:var(--action-primary-fg);font-size:14px;padding:15px;text-align:center;border-radius:2px">В корзину</div>
+                </div>
+                <div style="border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);padding:14px 0;display:flex;gap:30px;font-size:13px;margin-bottom:22px"><span style="color:var(--text-primary);border-bottom:1px solid var(--accent-gold);padding-bottom:3px">Характеристики</span><span style="color:var(--text-muted)">Описание</span><span style="color:var(--text-muted)">Доставка</span></div>
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <sc-for list="{{ specs }}" as="s" hint-placeholder-count="5">
+                    <div style="display:flex;justify-content:space-between;font-size:14px;border-bottom:1px dotted var(--border-subtle);padding-bottom:9px"><span style="color:var(--text-muted)">{{ s.k }}</span><span style="color:var(--text-primary)">{{ s.v }}</span></div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:24px;flex-shrink:0">
+          <div style="width:390px;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
+            <div style="background:var(--surface-hero);padding:7px 18px;font-size:10px;color:rgba(251,249,244,0.7);text-align:center">Доставка от 25 000 ₸ — бесплатно</div>
+            <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:11px;color:var(--text-secondary)">☰</span>
+              <span style="font-size:15px;letter-spacing:0.26em;color:var(--text-primary)">CONTRAST</span>
+              <span style="font-size:11px;color:var(--text-secondary)">Корзина·2</span>
+            </div>
+            <div style="background:#fff;padding:11px 18px;border-bottom:1px solid var(--border-subtle)"><div style="border:1px solid var(--border-strong);border-radius:2px;padding:10px 12px;font-size:13px;color:var(--text-muted)">Поиск по каталогу</div></div>
+            <div style="background:#fff;padding:10px 18px;border-bottom:1px solid var(--border-subtle);display:flex;gap:16px;font-size:12px;color:var(--text-secondary);overflow:hidden">
+              <sc-for list="{{ catsMobileNav }}" as="c" hint-placeholder-count="4"><span style="flex-shrink:0;white-space:nowrap">{{ c }}</span></sc-for>
+            </div>
+            <div style="position:relative;height:200px;background:var(--surface-hero);overflow:hidden">
+              <img src="assets/storefront-sign.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6">
+              <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(16,14,11,0.92), rgba(16,14,11,0.3))"></div>
+              <div style="position:relative;padding:26px 18px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;box-sizing:border-box">
+                <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:8px">Premium hookah shop</div>
+                <div style="font-family:var(--font-display);font-size:29px;line-height:1.1;color:#fbf9f4">Всё для кальяна в одном месте</div>
+              </div>
+            </div>
+            <div style="padding:18px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <sc-for list="{{ mobileDense }}" as="p" hint-placeholder-count="4">
+                  <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:4px;overflow:hidden">
+                    <div style="width:100%;height:120px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center"><span style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+                    <div style="padding:11px 12px 13px">
+                      <div style="font-size:13px;line-height:1.3;color:var(--text-primary);margin-bottom:8px;height:34px;overflow:hidden">{{ p.name }}</div>
+                      <div style="font-family:var(--font-display);font-size:18px;color:var(--text-primary);margin-bottom:3px">{{ p.price }}</div>
+                      <div style="font-size:10px;color:var(--text-muted)">осталось {{ p.stock }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="width:390px;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
+            <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:13px 18px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--text-secondary)">←</span><span style="font-size:13px;color:var(--text-primary)">Табачные смеси</span><span style="font-size:11px;color:var(--text-secondary)">Поиск</span></div>
+            <div style="background:#fff;padding:10px 18px;border-bottom:1px solid var(--border-subtle);display:flex;gap:8px;overflow:hidden">
+              <span style="font-size:11px;background:var(--action-primary-bg);color:#fbf9f4;padding:6px 12px;border-radius:999px;white-space:nowrap">Фильтры · 2</span>
+              <span style="font-size:11px;border:1px solid var(--border-subtle);background:#fff;color:var(--text-secondary);padding:6px 12px;border-radius:999px;white-space:nowrap">Al Fakher ×</span>
+              <span style="font-size:11px;border:1px solid var(--border-subtle);background:#fff;color:var(--text-secondary);padding:6px 12px;border-radius:999px;white-space:nowrap">Мята ×</span>
+            </div>
+            <div style="padding:14px 18px 20px">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">128 товаров</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <sc-for list="{{ mobileDense2 }}" as="p" hint-placeholder-count="6">
+                  <div style="background:#fff;border:1px solid var(--border-subtle);border-radius:4px;overflow:hidden">
+                    <div style="width:100%;height:112px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center"><span style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+                    <div style="padding:10px 11px 12px">
+                      <div style="font-size:12px;line-height:1.3;color:var(--text-primary);margin-bottom:7px;height:31px;overflow:hidden">{{ p.name }}</div>
+                      <div style="font-family:var(--font-display);font-size:17px;color:var(--text-primary)">{{ p.price }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="width:390px;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
+            <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:13px 18px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--text-secondary)">←</span><span style="font-size:13px;color:var(--text-primary)">Кальяны</span><span style="font-size:11px;color:var(--text-secondary)">Корзина</span></div>
+            <div style="width:100%;height:280px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center"><span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+            <div style="padding:18px">
+              <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:9px">Amy Deluxe</div>
+              <div style="font-family:var(--font-display);font-size:26px;line-height:1.15;color:var(--text-primary);margin-bottom:14px">Amy Deluxe 650, чёрный</div>
+              <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:5px"><span style="font-family:var(--font-display);font-size:27px;color:var(--text-primary)">32 000 ₸</span><span style="font-size:14px;color:var(--text-muted);text-decoration:line-through">38 000 ₸</span></div>
+              <div style="font-size:12px;color:var(--state-success);margin-bottom:18px">В наличии · осталось 5</div>
+              <div style="display:flex;flex-direction:column;gap:11px">
+                <sc-for list="{{ specsShort }}" as="s" hint-placeholder-count="3">
+                  <div style="display:flex;justify-content:space-between;font-size:13px;border-bottom:1px dotted var(--border-subtle);padding-bottom:9px"><span style="color:var(--text-muted)">{{ s.k }}</span><span style="color:var(--text-primary)">{{ s.v }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid var(--border-subtle);padding:12px 18px;display:flex;gap:10px">
+              <div style="display:flex;align-items:center;border:1px solid var(--border-subtle);border-radius:2px"><span style="padding:0 13px;color:var(--text-secondary)">−</span><span style="font-size:14px">1</span><span style="padding:0 13px;color:var(--text-secondary)">+</span></div>
+              <div style="flex:1;background:var(--action-primary-bg);color:var(--action-primary-fg);font-size:13px;padding:14px;text-align:center;border-radius:2px">В корзину</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1b" style="flex-shrink:0">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.1em;background:var(--accent-gold);color:#17140f;padding:4px 9px;border-radius:2px">1B</span>
+        <h2 style="font-family:var(--font-display);font-size:32px;color:#fbf9f4;margin:0;font-weight:400">Рельс</h2>
+      </div>
+      <p style="font-size:14px;line-height:1.6;color:rgba(251,249,244,0.6);margin:0 0 24px;max-width:620px">Разряженный каталог, навигация слева. Постоянный левый рельс: категории на главной, фильтры в каталоге — одна и та же колонка на всех страницах. Три товара в ряд, крупные фотографии, больше воздуха. Ближе к aesop.com.</p>
+
+      <div style="display:flex;gap:32px;align-items:flex-start">
+        <div style="width:1280px;flex-shrink:0;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.45)">
+
+          <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:20px 40px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:18px;letter-spacing:0.3em;color:var(--text-primary)">CONTRAST</div>
+            <div style="display:flex;gap:26px;font-size:13px;color:var(--text-secondary)"><span>Поиск</span><span>Кабинет</span><span style="color:var(--text-primary)">Корзина · 2</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:248px 1fr">
+            <aside style="border-right:1px solid var(--border-subtle);padding:34px 28px">
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:18px">Каталог</div>
+              <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:38px">
+                <sc-for list="{{ railCats }}" as="c" hint-placeholder-count="8">
+                  <span style="{{ c.style }}">{{ c.label }}</span>
+                </sc-for>
+              </div>
+              <div style="height:1px;background:var(--border-subtle);margin-bottom:30px"></div>
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px">Бренд</div>
+              <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:34px;font-size:14px;color:var(--text-secondary)">
+                <sc-for list="{{ brands }}" as="b" hint-placeholder-count="5"><span>{{ b }}</span></sc-for>
+              </div>
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px">Вкус</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px">
+                <sc-for list="{{ flavors }}" as="f" hint-placeholder-count="5">
+                  <span style="font-size:12px;border:1px solid var(--border-subtle);border-radius:999px;padding:6px 12px;color:var(--text-secondary);background:#fff">{{ f }}</span>
+                </sc-for>
+              </div>
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">Наличие</div>
+              <div style="font-size:14px;color:var(--text-secondary)">Только в наличии</div>
+            </aside>
+
+            <div>
+              <div style="position:relative;height:480px;background:var(--surface-hero);overflow:hidden">
+                <img src="assets/interior-shelving.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.62">
+                <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(16,14,11,0.9) 5%, rgba(16,14,11,0.25) 70%)"></div>
+                <div style="position:relative;height:100%;box-sizing:border-box;padding:56px;display:flex;flex-direction:column;justify-content:flex-end">
+                  <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:20px">Premium hookah shop · Астана</div>
+                  <div style="font-family:var(--font-display);font-size:62px;line-height:1.05;color:#fbf9f4;max-width:640px;margin-bottom:20px">Кальян — это про вкус, а не про дым</div>
+                  <p style="font-size:15px;line-height:1.65;color:rgba(251,249,244,0.72);margin:0 0 30px;max-width:440px">Отобранные аппараты, свежие смеси и всё, что нужно к ним.</p>
+                  <div style="display:flex;gap:12px">
+                    <div style="background:#fbf9f4;color:#17140f;font-size:13px;padding:14px 30px;border-radius:2px">Смотреть каталог</div>
+                    <div style="border:1px solid rgba(246,242,234,0.4);color:#fbf9f4;font-size:13px;padding:14px 30px;border-radius:2px">Собрать кальян</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="padding:56px 56px 0">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+                  <h3 style="font-family:var(--font-display);font-size:34px;color:var(--text-primary);margin:0;font-weight:400">Табачные смеси</h3>
+                  <span style="font-size:13px;color:var(--text-muted)">128 товаров · сначала популярные</span>
+                </div>
+                <div style="height:1px;background:var(--accent-gold);width:56px;margin:16px 0 40px"></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+                  <sc-for list="{{ airy }}" as="p" hint-placeholder-count="6">
+                    <div>
+                      <div style="width:100%;height:280px;background:var(--surface-sunken);margin-bottom:18px;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+                      <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:9px">{{ p.brand }}</div>
+                      <div style="font-size:16px;line-height:1.4;color:var(--text-primary);margin-bottom:14px;min-height:44px">{{ p.name }}</div>
+                      <div style="display:flex;align-items:baseline;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border-subtle)">
+                        <span style="font-family:var(--font-display);font-size:24px;color:var(--text-primary)">{{ p.price }}</span>
+                        <span style="font-size:12px;color:{{ p.stockColor }}">осталось {{ p.stock }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="padding:64px 56px 64px">
+                <div style="height:1px;background:var(--border-subtle);margin-bottom:56px"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start">
+                  <div style="width:100%;height:520px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center"><span style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+                  <div style="padding-top:8px">
+                    <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:16px">Amy Deluxe · Германия</div>
+                    <h4 style="font-family:var(--font-display);font-size:46px;line-height:1.08;color:var(--text-primary);margin:0 0 22px;font-weight:400">Amy Deluxe 650, чёрный</h4>
+                    <p style="font-size:15px;line-height:1.75;color:var(--text-secondary);margin:0 0 32px;max-width:400px">Немецкая сборка, шахта из нержавеющей стали, колба из дымчатого стекла. Высота 65 см, два шланга в комплекте.</p>
+                    <div style="font-family:var(--font-display);font-size:38px;color:var(--text-primary);margin-bottom:6px">32 000 ₸</div>
+                    <div style="font-size:13px;color:var(--state-success);margin-bottom:34px">В наличии · осталось 5</div>
+                    <div style="display:flex;gap:12px;margin-bottom:40px;max-width:400px">
+                      <div style="display:flex;align-items:center;border:1px solid var(--border-subtle);border-radius:2px;background:#fff"><span style="padding:0 16px;color:var(--text-secondary)">−</span><span style="padding:0 4px;font-size:15px">1</span><span style="padding:0 16px;color:var(--text-secondary)">+</span></div>
+                      <div style="flex:1;background:var(--action-primary-bg);color:var(--action-primary-fg);font-size:14px;padding:16px;text-align:center;border-radius:2px">В корзину</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:13px;max-width:400px">
+                      <sc-for list="{{ specs }}" as="s" hint-placeholder-count="5">
+                        <div style="display:flex;justify-content:space-between;font-size:14px;border-bottom:1px solid var(--border-subtle);padding-bottom:11px"><span style="color:var(--text-muted)">{{ s.k }}</span><span style="color:var(--text-primary)">{{ s.v }}</span></div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:24px;flex-shrink:0">
+          <div style="width:390px;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
+            <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:16px 20px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--text-secondary)">☰</span><span style="font-size:15px;letter-spacing:0.26em;color:var(--text-primary)">CONTRAST</span><span style="font-size:11px;color:var(--text-secondary)">Корзина</span></div>
+            <div style="position:relative;height:330px;background:var(--surface-hero);overflow:hidden">
+              <img src="assets/interior-shelving.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6">
+              <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(16,14,11,0.92), rgba(16,14,11,0.2))"></div>
+              <div style="position:relative;height:100%;box-sizing:border-box;padding:24px 20px 28px;display:flex;flex-direction:column;justify-content:flex-end">
+                <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px">Premium hookah shop</div>
+                <div style="font-family:var(--font-display);font-size:34px;line-height:1.08;color:#fbf9f4;margin-bottom:16px">Кальян — это про вкус, а не про дым</div>
+                <div style="display:inline-block;align-self:flex-start;background:#fbf9f4;color:#17140f;font-size:13px;padding:13px 26px;border-radius:2px">Смотреть каталог</div>
+              </div>
+            </div>
+            <div style="padding:28px 20px 24px">
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px">Категории</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ catsShort }}" as="c" hint-placeholder-count="4">
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--text-primary);padding:15px 0;border-bottom:1px solid var(--border-subtle)"><span>{{ c }}</span><span style="color:var(--text-muted);font-size:13px">→</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="width:390px;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
+            <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:16px 20px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--text-secondary)">←</span><span style="font-size:13px;color:var(--text-primary)">Табачные смеси</span><span style="font-size:11px;color:var(--text-secondary)">Фильтры</span></div>
+            <div style="padding:24px 20px 28px">
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:22px">128 товаров</div>
+              <div style="display:flex;flex-direction:column;gap:30px">
+                <sc-for list="{{ mobileAiry }}" as="p" hint-placeholder-count="3">
+                  <div>
+                    <div style="width:100%;height:230px;background:var(--surface-sunken);margin-bottom:14px;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+                    <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px">{{ p.brand }}</div>
+                    <div style="font-size:15px;line-height:1.4;color:var(--text-primary);margin-bottom:12px">{{ p.name }}</div>
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border-subtle)"><span style="font-family:var(--font-display);font-size:21px;color:var(--text-primary)">{{ p.price }}</span><span style="font-size:11px;color:var(--text-muted)">осталось {{ p.stock }}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="width:390px;background:var(--surface-page);border-radius:4px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.45)">
+            <div style="background:#fff;border-bottom:1px solid var(--border-subtle);padding:16px 20px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--text-secondary)">←</span><span style="font-size:13px;color:var(--text-primary)">Кальяны</span><span style="font-size:11px;color:var(--text-secondary)">Корзина</span></div>
+            <div style="width:100%;height:360px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center"><span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted)">Фото товара</span></div>
+            <div style="padding:24px 20px">
+              <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px">Amy Deluxe · Германия</div>
+              <div style="font-family:var(--font-display);font-size:30px;line-height:1.12;color:var(--text-primary);margin-bottom:16px">Amy Deluxe 650, чёрный</div>
+              <p style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin:0 0 22px">Немецкая сборка, шахта из нержавеющей стали, колба из дымчатого стекла.</p>
+              <div style="font-family:var(--font-display);font-size:30px;color:var(--text-primary);margin-bottom:5px">32 000 ₸</div>
+              <div style="font-size:12px;color:var(--state-success)">В наличии · осталось 5</div>
+            </div>
+            <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid var(--border-subtle);padding:14px 20px;display:flex;gap:10px">
+              <div style="display:flex;align-items:center;border:1px solid var(--border-subtle);border-radius:2px"><span style="padding:0 13px;color:var(--text-secondary)">−</span><span style="font-size:14px">1</span><span style="padding:0 13px;color:var(--text-secondary)">+</span></div>
+              <div style="flex:1;background:var(--action-primary-bg);color:var(--action-primary-fg);font-size:13px;padding:15px;text-align:center;border-radius:2px">В корзину</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+const P = [
+  { brand: "Al Fakher", name: "Двойное яблоко, 50 г", price: "4 500 ₸", stock: 3 },
+  { brand: "Adalya", name: "Мята, 50 г", price: "4 200 ₸", stock: 14 },
+  { brand: "Fumari", name: "Виноград, 100 г", price: "7 900 ₸", stock: 1 },
+  { brand: "Al Fakher", name: "Мохито, 50 г", price: "4 500 ₸", stock: 9 },
+  { brand: "Chabacco", name: "Strong, мохито, 50 г", price: "3 900 ₸", stock: 12 },
+  { brand: "MustHave", name: "Nasteam, дыня, 50 г", price: "3 600 ₸", stock: 4 },
+  { brand: "Adalya", name: "Love 66, 50 г", price: "4 200 ₸", stock: 8 },
+  { brand: "Element", name: "Земля, барбарис, 40 г", price: "3 400 ₸", stock: 6 },
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    const stockColor = (n) => (n <= 3 ? "var(--state-danger)" : "var(--text-muted)");
+    const withSlot = (key, arr) => arr.map((p, i) => ({ ...p, stockColor: stockColor(p.stock), [key]: key + "-" + i }));
+
+    return {
+      cats: ["Кальяны", "Табачные смеси", "Бестабачные смеси", "Угли и мундштуки", "Чаши", "Колбы", "Аксессуары", "Сигары и зажигалки"],
+      catsShort: ["Кальяны", "Табачные смеси", "Бестабачные", "Угли", "Чаши", "Аксессуары"],
+      catsMobileNav: ["Кальяны", "Табачные смеси", "Угли", "Чаши"],
+      brands: ["Al Fakher", "Adalya", "Fumari", "Chabacco", "MustHave"],
+      flavors: ["Мята", "Яблоко", "Виноград", "Мохито", "Дыня", "Цитрус"],
+      filterChips: [
+        { label: "Al Fakher ×", style: "font-size:12px;background:var(--action-primary-bg);color:#fbf9f4;padding:7px 13px;border-radius:999px;white-space:nowrap" },
+        { label: "Мята ×", style: "font-size:12px;background:var(--action-primary-bg);color:#fbf9f4;padding:7px 13px;border-radius:999px;white-space:nowrap" },
+        { label: "Бренд ⌄", style: "font-size:12px;border:1px solid var(--border-subtle);color:var(--text-secondary);padding:7px 13px;border-radius:999px;white-space:nowrap" },
+        { label: "Вкус ⌄", style: "font-size:12px;border:1px solid var(--border-subtle);color:var(--text-secondary);padding:7px 13px;border-radius:999px;white-space:nowrap" },
+        { label: "Вес ⌄", style: "font-size:12px;border:1px solid var(--border-subtle);color:var(--text-secondary);padding:7px 13px;border-radius:999px;white-space:nowrap" },
+        { label: "Цена ⌄", style: "font-size:12px;border:1px solid var(--border-subtle);color:var(--text-secondary);padding:7px 13px;border-radius:999px;white-space:nowrap" },
+        { label: "Только в наличии", style: "font-size:12px;border:1px solid var(--border-subtle);color:var(--text-secondary);padding:7px 13px;border-radius:999px;white-space:nowrap" },
+      ],
+      railCats: ["Кальяны", "Табачные смеси", "Бестабачные смеси", "Угли и мундштуки", "Чаши", "Колбы", "Аксессуары", "Сигары и зажигалки"].map((label, i) => ({
+        label,
+        style: i === 1
+          ? "font-size:15px;color:var(--text-primary);border-left:2px solid var(--accent-gold);padding-left:12px;margin-left:-14px"
+          : "font-size:15px;color:var(--text-secondary);padding-left:12px;margin-left:-14px",
+      })),
+      dense: withSlot("slotA", P),
+      airy: withSlot("slotB", P.slice(0, 6)),
+      mobileDense: withSlot("slotAM", P.slice(0, 4)),
+      mobileDense2: withSlot("slotAM2", P.slice(0, 6)),
+      mobileAiry: withSlot("slotBM", P.slice(0, 3)),
+      specs: [
+        { k: "Производитель", v: "Amy Deluxe" },
+        { k: "Высота", v: "65 см" },
+        { k: "Материал шахты", v: "Нержавеющая сталь" },
+        { k: "Колба", v: "Дымчатое стекло" },
+        { k: "Шлангов в комплекте", v: "2" },
+      ],
+      specsShort: [
+        { k: "Высота", v: "65 см" },
+        { k: "Материал шахты", v: "Нерж. сталь" },
+        { k: "Шлангов", v: "2" },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>
