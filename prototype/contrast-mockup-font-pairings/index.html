@@ -58,12 +58,13 @@
     font-size:13px;
     border-bottom:1px solid #2A241A;
   }
-  .toolbar-title{display:flex; flex-direction:column; gap:2px; padding-top:2px;}
+  .toolbar-title{display:flex; flex-direction:column; gap:2px; padding-top:2px; flex-shrink:0;}
   .toolbar-title strong{color:#fff; font-weight:600; font-size:14px; letter-spacing:.01em;}
   .toolbar-title span{color:#948A72; font-size:11.5px;}
-  .pair-groups{display:flex; flex-direction:column; gap:8px; margin-left:auto;}
-  .pair-groups .row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
-  .row-label{font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:#6E6552; width:118px; flex-shrink:0; text-align:right;}
+  .pair-groups{display:flex; align-items:center; gap:14px; margin-left:auto; flex-wrap:wrap; padding-top:2px;}
+  .pair-groups .row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .pair-groups .divider{width:1px; align-self:stretch; background:#3A3323; flex-shrink:0;}
+  .row-label{font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:#6E6552; flex-shrink:0; white-space:nowrap;}
   .pair-group{display:flex; gap:6px; flex-wrap:wrap;}
   .pair-btn{
     position:relative;
@@ -78,7 +79,7 @@
     font-size:9px; font-weight:700; letter-spacing:.04em; padding:2px 6px; border-radius:20px;
     text-transform:uppercase;
   }
-  @media (max-width:900px){ .pair-groups{margin-left:0; width:100%;} .pair-groups .row{justify-content:flex-start;} .row-label{width:auto; text-align:left;} }
+  @media (max-width:900px){ .pair-groups{margin-left:0; width:100%;} .pair-groups .divider{display:none;} }
 
   /* ---------- Site nav: one persistent bar, transparent over hero, solid past it ---------- */
   .logo{display:flex; align-items:center; gap:10px; flex-shrink:0;}
@@ -228,6 +229,7 @@
   </div>
   <div class="pair-groups">
     <div class="row"><span class="row-label">Пары шрифтов</span><div class="pair-group" id="pairGroupPairs"></div></div>
+    <div class="divider"></div>
     <div class="row"><span class="row-label">Один шрифт везде</span><div class="pair-group" id="pairGroupSolo"></div></div>
   </div>
 </div>
