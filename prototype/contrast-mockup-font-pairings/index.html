@@ -2,7 +2,7 @@
 <title>Contrast — шрифтовые пары</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&family=Jost:wght@300;400;500;600&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=PT+Sans:wght@400;700&family=Yeseva+One&family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant:wght@400;500;600&family=Jost:wght@300;400;500;600&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=PT+Sans:wght@400;700&family=Yeseva+One&family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#17130E;
@@ -77,8 +77,9 @@
   .pair-btn .tag{
     position:absolute; top:-8px; right:-6px; background:#3E7A4A; color:#fff;
     font-size:9px; font-weight:700; letter-spacing:.04em; padding:2px 6px; border-radius:20px;
-    text-transform:uppercase;
+    text-transform:uppercase; white-space:nowrap;
   }
+  .pair-btn .tag.brand{background:var(--gold-deep);}
   @media (max-width:900px){ .pair-groups{margin-left:0; width:100%;} .pair-groups .divider{display:none;} }
 
   /* ---------- Site nav: one persistent bar, transparent over hero, solid past it ---------- */
@@ -226,6 +227,7 @@
 <div class="toolbar">
   <div class="toolbar-title">
     <strong>Contrast — шрифтовые пары</strong>
+    <span>«Брендбук» — Playfair Display как в брендбуке; текст временно на Onest вместо платного Noah Text</span>
   </div>
   <div class="pair-groups">
     <div class="row"><span class="row-label">Пары шрифтов</span><div class="pair-group" id="pairGroupPairs"></div></div>
@@ -342,12 +344,19 @@
 
 <script>
   var PAIRS = [
+    { id:'brand', src:'Брендбук', group:'pair', label:'Playfair + Noah', tag:'заглушка', tagClass:'brand', default:true,
+      display:"'Playfair Display', Georgia, serif", body:"'Onest', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
+      famDisplay:'Playfair Display 700 (из брендбука)', famBody:'Onest 400–600 — временная замена Noah Text',
+      mood:'Пара из брендбука: Playfair Display в заголовках. Текст должен идти на Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' },
     { id:'current', src:'1A', group:'pair', label:'Текущий', tag:'на сайте', display:"'Cormorant', Georgia, serif", body:"'Jost', Arial, sans-serif", dw:500, dwLg:600, track:'0em',
       famDisplay:'Cormorant 500/600', famBody:'Jost 300–500', mood:'Лёгкий, воздушный — то, что уже стоит в макете сейчас.' },
     { id:'philosopher', src:'1C', group:'pair', label:'Философ', tag:'', display:"'Philosopher', Georgia, serif", body:"'PT Sans', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
       famDisplay:'Philosopher 700', famBody:'PT Sans 400/700', mood:'Мягкий гуманистичный дисплей + узнаваемый PT Sans — спокойный и надёжный.' },
     { id:'boutique', src:'1D', group:'pair', label:'Бутик', tag:'', display:"'Yeseva One', Georgia, serif", body:"'Manrope', Arial, sans-serif", dw:400, dwLg:400, track:'0em',
       famDisplay:'Yeseva One 400', famBody:'Manrope 400–700', mood:'Яркий декоративный акцент в заголовках + уверенный гротеск в тексте.' },
+    { id:'noah', src:'Брендбук', group:'solo', label:'Noah Text', tag:'заглушка', tagClass:'brand', display:"'Onest', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
+      famDisplay:'Onest 600/700 — временная замена Noah Text', famBody:'Onest 400/500 — временная замена Noah Text',
+      mood:'Один шрифт на всё, из брендбука: Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' },
     { id:'golos', src:'2A', group:'solo', label:'Голос', tag:'', display:"'Golos Text', Arial, sans-serif", body:"'Golos Text', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
       famDisplay:'Golos Text 600/700', famBody:'Golos Text 400/500', mood:'Один шрифт на всё — геометричный, нейтральный.' },
     { id:'onest', src:'2B', group:'solo', label:'Онест', tag:'', display:"'Onest', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
@@ -390,11 +399,13 @@
     syncChromeHeights();
   }
 
+  var defaultPair = null;
   PAIRS.forEach(function(p){
+    if (p.default) defaultPair = p;
     var btn = document.createElement('button');
-    btn.className = 'pair-btn' + (p.id==='current' ? ' active' : '');
+    btn.className = 'pair-btn' + (p.default ? ' active' : '');
     btn.dataset.id = p.id;
-    btn.innerHTML = p.label + (p.tag ? '<span class="tag">'+p.tag+'</span>' : '');
+    btn.innerHTML = p.label + (p.tag ? '<span class="tag' + (p.tagClass ? ' '+p.tagClass : '') + '">'+p.tag+'</span>' : '');
     btn.title = p.src;
     btn.addEventListener('click', function(){ applyPair(p); });
     (p.group === 'solo' ? groupSolo : groupPairs).appendChild(btn);
@@ -407,6 +418,7 @@
       '<td>' + p.mood + '</td>';
     specBody.appendChild(tr);
   });
+  if (defaultPair) applyPair(defaultPair);
 
   var PRODUCTS = [
     { brand:'Al Fakher', name:'Двойное яблоко, 50 г', price:'4 500 ₸', stock:3 },
