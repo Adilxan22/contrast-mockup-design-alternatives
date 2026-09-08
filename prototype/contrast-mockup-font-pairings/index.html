@@ -2,7 +2,7 @@
 <title>Contrast — шрифтовые пары</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant:wght@400;500;600&family=Jost:wght@300;400;500;600&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=PT+Sans:wght@400;700&family=Yeseva+One&family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#17130E;
@@ -21,10 +21,10 @@
     --danger:#9C4A3A;
     --radius:2px;
 
-    --font-display:'Cormorant', Georgia, serif;
-    --font-body:'Jost', Arial, sans-serif;
-    --display-w:500;
-    --display-w-lg:600;
+    --font-display:'Playfair Display', Georgia, serif;
+    --font-body:'Onest', Arial, sans-serif;
+    --display-w:700;
+    --display-w-lg:700;
     --head-track:0em;
 
     --toolbar-h:0px;
@@ -54,7 +54,7 @@
     background:#0E0C09; color:#DCD3C0;
     padding:14px 22px;
     display:flex; flex-wrap:wrap; align-items:flex-start; gap:20px;
-    font-family:'Jost', Arial, sans-serif;
+    font-family:'Onest', Arial, sans-serif;
     font-size:13px;
     border-bottom:1px solid #2A241A;
   }
@@ -348,23 +348,18 @@
       display:"'Playfair Display', Georgia, serif", body:"'Onest', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
       famDisplay:'Playfair Display 700 (из брендбука)', famBody:'Onest 400–600 — временная замена Noah Text',
       mood:'Пара из брендбука: Playfair Display в заголовках. Текст должен идти на Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' },
-    { id:'current', src:'1A', group:'pair', label:'Текущий', tag:'на сайте', display:"'Cormorant', Georgia, serif", body:"'Jost', Arial, sans-serif", dw:500, dwLg:600, track:'0em',
-      famDisplay:'Cormorant 500/600', famBody:'Jost 300–500', mood:'Лёгкий, воздушный — то, что уже стоит в макете сейчас.' },
-    { id:'philosopher', src:'1C', group:'pair', label:'Философ', tag:'', display:"'Philosopher', Georgia, serif", body:"'PT Sans', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
-      famDisplay:'Philosopher 700', famBody:'PT Sans 400/700', mood:'Мягкий гуманистичный дисплей + узнаваемый PT Sans — спокойный и надёжный.' },
-    { id:'boutique', src:'1D', group:'pair', label:'Бутик', tag:'', display:"'Yeseva One', Georgia, serif", body:"'Manrope', Arial, sans-serif", dw:400, dwLg:400, track:'0em',
-      famDisplay:'Yeseva One 400', famBody:'Manrope 400–700', mood:'Яркий декоративный акцент в заголовках + уверенный гротеск в тексте.' },
+    { id:'playfair_golos', src:'3A', group:'pair', label:'Playfair + Golos', tag:'', display:"'Playfair Display', Georgia, serif", body:"'Golos Text', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
+      famDisplay:'Playfair Display 700', famBody:'Golos Text 400/500', mood:'Классический контраст: засечки Playfair Display в заголовках + нейтральный геометричный Golos Text в тексте.' },
+    { id:'ttnorms_golos', src:'3B', group:'pair', label:'TT Norms + Golos', tag:'заглушка', tagClass:'brand', display:"'Commissioner', Arial, sans-serif", body:"'Golos Text', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
+      famDisplay:'Commissioner 600/700 — временная замена TT Norms Pro', famBody:'Golos Text 400/500',
+      mood:'TT Norms Pro (платный шрифт TypeType, веб-лицензии нет) в заголовках — здесь вместо него временно стоит близкий по характеру бесплатный Commissioner — + Golos Text в тексте.' },
+    { id:'golos_onest', src:'3C', group:'pair', label:'Golos + Onest', tag:'', display:"'Golos Text', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
+      famDisplay:'Golos Text 600/700', famBody:'Onest 400/500', mood:'Два гротеска: чуть более плотный Golos Text в заголовках + мягкий Onest в тексте.' },
+    { id:'philosopher', src:'1C', group:'pair', label:'Философ + Onest', tag:'', display:"'Philosopher', Georgia, serif", body:"'Onest', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
+      famDisplay:'Philosopher 700', famBody:'Onest 400/500', mood:'Мягкий гуманистичный дисплей Philosopher + дружелюбный Onest в тексте — спокойное современное сочетание.' },
     { id:'noah', src:'Брендбук', group:'solo', label:'Noah Text', tag:'заглушка', tagClass:'brand', display:"'Onest', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
       famDisplay:'Onest 600/700 — временная замена Noah Text', famBody:'Onest 400/500 — временная замена Noah Text',
-      mood:'Один шрифт на всё, из брендбука: Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' },
-    { id:'golos', src:'2A', group:'solo', label:'Голос', tag:'', display:"'Golos Text', Arial, sans-serif", body:"'Golos Text', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
-      famDisplay:'Golos Text 600/700', famBody:'Golos Text 400/500', mood:'Один шрифт на всё — геометричный, нейтральный.' },
-    { id:'onest', src:'2B', group:'solo', label:'Онест', tag:'', display:"'Onest', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
-      famDisplay:'Onest 600/700', famBody:'Onest 400/500', mood:'Один шрифт на всё — мягкий и дружелюбный.' },
-    { id:'commissioner', src:'2C', group:'solo', label:'Комиссия', tag:'', display:"'Commissioner', Arial, sans-serif", body:"'Commissioner', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
-      famDisplay:'Commissioner 600/700', famBody:'Commissioner 400/500', mood:'Один шрифт на всё — универсальный гротеск с широким диапазоном насыщенности.' },
-    { id:'ptsans', src:'2D', group:'solo', label:'ПТ Санс', tag:'', display:"'PT Sans', Arial, sans-serif", body:"'PT Sans', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
-      famDisplay:'PT Sans 700', famBody:'PT Sans 400', mood:'Один шрифт на всё — самый узнаваемый русский гротеск (Аэрофлот, Госуслуги).' }
+      mood:'Один шрифт на всё, из брендбука: Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' }
   ];
 
   var root = document.documentElement.style;
