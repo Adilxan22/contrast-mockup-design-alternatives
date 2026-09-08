@@ -2,7 +2,7 @@
 <title>Contrast — шрифтовые пары</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&family=Bodoni+Moda:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#17130E;
@@ -23,6 +23,7 @@
 
     --font-display:'Playfair Display', Georgia, serif;
     --font-body:'Onest', Arial, sans-serif;
+    --font-accent:'Onest', Arial, sans-serif;
     --display-w:700;
     --display-w-lg:700;
     --head-track:0em;
@@ -129,7 +130,7 @@
   /* ===================== HERO — Стык (approved) ===================== */
   .hero{position:relative; min-height:92vh; margin-top:calc(-1 * var(--nav-h)); display:grid; grid-template-columns:1.05fr 1fr; background:var(--ink); color:var(--white); overflow:hidden;}
   .split-left{padding:150px 56px 60px; display:flex; flex-direction:column; gap:24px; justify-content:center; position:relative; z-index:2;}
-  .eyebrow{font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-light); font-family:var(--font-body);}
+  .eyebrow{font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-light); font-family:var(--font-accent);}
   h1.headline{font-size:clamp(36px,5vw,60px); line-height:1.06; text-wrap:balance;}
   .sub{font-size:16px; line-height:1.6; color:#CFC5B2; max-width:440px; font-family:var(--font-body); font-weight:300;}
   .cta-row{display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:6px;}
@@ -153,7 +154,7 @@
   .promo-wrap{padding:28px 40px 0; display:grid; grid-template-columns:1fr 1fr; gap:20px;}
   .tile{background:#fff; border:1px solid var(--stone-line); border-radius:4px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; font-family:var(--font-body); min-height:120px;}
   .tile:last-child{background:var(--stone-card);}
-  .tile .label{font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:10px;}
+  .tile .label{font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:10px; font-family:var(--font-accent);}
   .tile:last-child .label{color:var(--text-muted-2);}
   .tile h4{font-size:24px; line-height:1.22; color:var(--text-dark); font-weight:var(--display-w);}
   .tile .link{font-size:13px; color:var(--text-muted); border-top:1px solid var(--stone-line); padding-top:14px; margin-top:14px;}
@@ -173,11 +174,11 @@
   .card{background:#fff; border:1px solid var(--stone-line); border-radius:4px; overflow:hidden;}
   .card-photo{position:relative; width:100%; height:180px; overflow:hidden; background:var(--stone-card);}
   .card-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-  .stock-badge{position:absolute; top:10px; left:10px; font-size:10.5px; font-weight:600; letter-spacing:.02em; padding:4px 9px; border-radius:20px; background:#fff; display:flex; align-items:center; gap:5px; font-family:var(--font-body);}
+  .stock-badge{position:absolute; top:10px; left:10px; font-size:10.5px; font-weight:600; letter-spacing:.02em; padding:4px 9px; border-radius:20px; background:#fff; display:flex; align-items:center; gap:5px; font-family:var(--font-accent);}
   .stock-badge .dot{width:5px; height:5px; border-radius:50%; background:currentColor;}
   .stock-badge.ok{color:var(--success);} .stock-badge.low{color:var(--danger);}
   .card-body{padding:14px 16px 16px; font-family:var(--font-body);}
-  .card-brand{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:7px;}
+  .card-brand{font-size:10.5px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:7px; font-family:var(--font-accent);}
   .card-name{font-size:14px; line-height:1.35; color:var(--text-dark); margin-bottom:12px; height:38px; overflow:hidden;}
   .card-foot{display:flex; align-items:baseline; justify-content:space-between;}
   .card-price{font-family:var(--font-display); font-weight:var(--display-w); font-size:20px; color:var(--text-dark);}
@@ -227,7 +228,7 @@
 <div class="toolbar">
   <div class="toolbar-title">
     <strong>Contrast — шрифтовые пары</strong>
-    <span>«Брендбук» — Playfair Display как в брендбуке; текст временно на Onest вместо платного Noah Text</span>
+    <span>Пометка «заглушка» — платный шрифт без веб-лицензии (Noah Text, TT Norms Pro, MTT Milano), временно заменён похожим бесплатным</span>
   </div>
   <div class="pair-groups">
     <div class="row"><span class="row-label">Пары шрифтов</span><div class="pair-group" id="pairGroupPairs"></div></div>
@@ -333,7 +334,7 @@
   <h2>Шрифтовые пары</h2>
   <p class="lede">Хиро и витрина уже утверждены — ниже возможные сочетания шрифтов для заголовков и текста. Переключайте кнопки вверху экрана, чтобы сравнить их вживую.</p>
   <table class="spectable">
-    <tr><th>Вариант</th><th>Заголовки</th><th>Текст</th><th>Настроение</th></tr>
+    <tr><th>Вариант</th><th>Заголовки</th><th>Текст</th><th>Акценты</th><th>Настроение</th></tr>
     <tbody id="specBody"></tbody>
   </table>
 </div>
@@ -359,7 +360,13 @@
       famDisplay:'Philosopher 700', famBody:'Onest 400/500', mood:'Мягкий гуманистичный дисплей Philosopher + дружелюбный Onest в тексте — спокойное современное сочетание.' },
     { id:'noah', src:'Брендбук', group:'solo', label:'Noah Text', tag:'заглушка', tagClass:'brand', display:"'Onest', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
       famDisplay:'Onest 600/700 — временная замена Noah Text', famBody:'Onest 400/500 — временная замена Noah Text',
-      mood:'Один шрифт на всё, из брендбука: Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' }
+      mood:'Один шрифт на всё, из брендбука: Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' },
+    { id:'mtt_milano', src:'Брендбук', group:'pair', label:'MTT Milano + Inter', tag:'заглушка', tagClass:'brand',
+      display:"'Bodoni Moda', Georgia, serif", body:"'Inter', Arial, sans-serif", accent:"'Manrope', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
+      famDisplay:'Bodoni Moda 600/700 — временная замена MTT Milano (Medium/Bold, кикер и тайтл)',
+      famBody:'Inter 400 (или Montserrat) — текст и интерфейс, 14–16px',
+      famAccent:'Inter/Manrope 600–700 — акценты и плашки, ALL CAPS с увеличенным трекингом',
+      mood:'Типографика по последнему брифу: заголовки — MTT Milano (платный шрифт, веб-лицензии нет, здесь временно Bodoni Moda), текст и интерфейс — Inter/Montserrat, акценты и плашки — Inter/Manrope капсом.' }
   ];
 
   var root = document.documentElement.style;
@@ -387,6 +394,7 @@
   function applyPair(p){
     root.setProperty('--font-display', p.display);
     root.setProperty('--font-body', p.body);
+    root.setProperty('--font-accent', p.accent || p.body);
     root.setProperty('--display-w', p.dw);
     root.setProperty('--display-w-lg', p.dwLg);
     root.setProperty('--head-track', p.track);
@@ -410,6 +418,7 @@
       '<td class="pname">' + p.src + ' · ' + p.label + (p.tag ? ' <span class="pill">'+p.tag+'</span>' : '') + '</td>' +
       '<td class="fam" style="font-family:' + p.display + '">' + p.famDisplay + '</td>' +
       '<td class="fam body" style="font-family:' + p.body + '">' + p.famBody + '</td>' +
+      '<td class="fam body" style="font-family:' + (p.accent || p.body) + '">' + (p.famAccent || p.famBody) + '</td>' +
       '<td>' + p.mood + '</td>';
     specBody.appendChild(tr);
   });
