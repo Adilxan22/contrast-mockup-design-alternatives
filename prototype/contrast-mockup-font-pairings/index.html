@@ -2,7 +2,7 @@
 <title>Contrast — шрифтовые пары</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&family=Bodoni+Moda:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Golos+Text:wght@400;500;600;700&family=Philosopher:wght@400;700&family=Onest:wght@400;500;600;700&family=Commissioner:wght@400;500;600;700&family=Bodoni+Moda:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=PT+Serif:wght@400;700&family=Lora:wght@500;600;700&family=Spectral:wght@500;600;700&family=Bitter:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#17130E;
@@ -21,11 +21,13 @@
     --danger:#9C4A3A;
     --radius:2px;
 
-    --font-display:'Playfair Display', Georgia, serif;
+    --font-display:'Golos Text', Arial, sans-serif;
     --font-body:'Onest', Arial, sans-serif;
     --font-accent:'Onest', Arial, sans-serif;
-    --display-w:700;
+    --font-hero:'Golos Text', Arial, sans-serif;
+    --display-w:600;
     --display-w-lg:700;
+    --hero-w:700;
     --head-track:0em;
 
     --toolbar-h:0px;
@@ -131,7 +133,7 @@
   .hero{position:relative; min-height:92vh; margin-top:calc(-1 * var(--nav-h)); display:grid; grid-template-columns:1.05fr 1fr; background:var(--ink); color:var(--white); overflow:hidden;}
   .split-left{padding:150px 56px 60px; display:flex; flex-direction:column; gap:24px; justify-content:center; position:relative; z-index:2;}
   .eyebrow{font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-light); font-family:var(--font-accent);}
-  h1.headline{font-size:clamp(36px,5vw,60px); line-height:1.06; text-wrap:balance;}
+  h1.headline{font-size:clamp(36px,5vw,60px); line-height:1.06; text-wrap:balance; font-family:var(--font-hero); font-weight:var(--hero-w);}
   .sub{font-size:16px; line-height:1.6; color:#CFC5B2; max-width:440px; font-family:var(--font-body); font-weight:300;}
   .cta-row{display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:6px;}
   .btn-gold{
@@ -228,12 +230,14 @@
 <div class="toolbar">
   <div class="toolbar-title">
     <strong>Contrast — шрифтовые пары</strong>
-    <span>Пометка «заглушка» — платный шрифт без веб-лицензии (Noah Text, TT Norms Pro, MTT Milano), временно заменён похожим бесплатным</span>
+    <span>Основная пара — Golos Text + Onest (выбрано). Ниже отдельно — подбор характера шрифта только для хиро-заголовка. Пометка «заглушка» — платный шрифт без веб-лицензии (Noah Text, TT Norms Pro, MTT Milano), временно заменён похожим бесплатным</span>
   </div>
   <div class="pair-groups">
     <div class="row"><span class="row-label">Пары шрифтов</span><div class="pair-group" id="pairGroupPairs"></div></div>
     <div class="divider"></div>
     <div class="row"><span class="row-label">Один шрифт везде</span><div class="pair-group" id="pairGroupSolo"></div></div>
+    <div class="divider"></div>
+    <div class="row"><span class="row-label">Шрифт хиро-заголовка</span><div class="pair-group" id="pairGroupHero"></div></div>
   </div>
 </div>
 
@@ -345,7 +349,7 @@
 
 <script>
   var PAIRS = [
-    { id:'brand', src:'Брендбук', group:'pair', label:'Playfair + Noah', tag:'заглушка', tagClass:'brand', default:true,
+    { id:'brand', src:'Брендбук', group:'pair', label:'Playfair + Noah', tag:'заглушка', tagClass:'brand',
       display:"'Playfair Display', Georgia, serif", body:"'Onest', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
       famDisplay:'Playfair Display 700 (из брендбука)', famBody:'Onest 400–600 — временная замена Noah Text',
       mood:'Пара из брендбука: Playfair Display в заголовках. Текст должен идти на Noah Text (платный шрифт TypeType, веб-лицензии нет) — здесь вместо него временно стоит близкий по характеру бесплатный Onest, до получения файлов Noah Text.' },
@@ -354,8 +358,8 @@
     { id:'ttnorms_golos', src:'3B', group:'pair', label:'TT Norms + Golos', tag:'заглушка', tagClass:'brand', display:"'Commissioner', Arial, sans-serif", body:"'Golos Text', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
       famDisplay:'Commissioner 600/700 — временная замена TT Norms Pro', famBody:'Golos Text 400/500',
       mood:'TT Norms Pro (платный шрифт TypeType, веб-лицензии нет) в заголовках — здесь вместо него временно стоит близкий по характеру бесплатный Commissioner — + Golos Text в тексте.' },
-    { id:'golos_onest', src:'3C', group:'pair', label:'Golos + Onest', tag:'', display:"'Golos Text', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
-      famDisplay:'Golos Text 600/700', famBody:'Onest 400/500', mood:'Два гротеска: чуть более плотный Golos Text в заголовках + мягкий Onest в тексте.' },
+    { id:'golos_onest', src:'3C', group:'pair', label:'Golos + Onest', tag:'выбрано', default:true, display:"'Golos Text', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
+      famDisplay:'Golos Text 600/700', famBody:'Onest 400/500', mood:'Два гротеска: чуть более плотный Golos Text в заголовках + мягкий Onest в тексте. Выбрано клиентом как основная пара сайта — заголовок хиро отдельно уточняется ниже.' },
     { id:'philosopher', src:'1C', group:'pair', label:'Философ + Onest', tag:'', display:"'Philosopher', Georgia, serif", body:"'Onest', Arial, sans-serif", dw:700, dwLg:700, track:'0em',
       famDisplay:'Philosopher 700', famBody:'Onest 400/500', mood:'Мягкий гуманистичный дисплей Philosopher + дружелюбный Onest в тексте — спокойное современное сочетание.' },
     { id:'noah', src:'Брендбук', group:'solo', label:'Noah Text', tag:'заглушка', tagClass:'brand', display:"'Onest', Arial, sans-serif", body:"'Onest', Arial, sans-serif", dw:600, dwLg:700, track:'0em',
@@ -369,9 +373,18 @@
       mood:'Типографика по последнему брифу: заголовки — MTT Milano (платный шрифт, веб-лицензии нет, здесь временно Bodoni Moda), текст и интерфейс — Inter/Montserrat, акценты и плашки — Inter/Manrope капсом.' }
   ];
 
+  var HERO_FONTS = [
+    { id:'auto', label:'Как в паре' },
+    { id:'ptserif', label:'PT Serif', family:"'PT Serif', Georgia, serif", weight:700, note:'Строгий редакционный сериф, сильная кириллица (шрифт ParaType).' },
+    { id:'lora', label:'Lora', family:"'Lora', Georgia, serif", weight:600, note:'Спокойный современный сериф, премиальный и разборчивый.' },
+    { id:'spectral', label:'Spectral', family:"'Spectral', Georgia, serif", weight:600, note:'Сдержанный редакционный сериф под крупные заголовки.' },
+    { id:'bitter', label:'Bitter', family:"'Bitter', Georgia, serif", weight:700, note:'Слэб-сериф — более тяжёлый и уверенный характер.' }
+  ];
+
   var root = document.documentElement.style;
   var groupPairs = document.getElementById('pairGroupPairs');
   var groupSolo = document.getElementById('pairGroupSolo');
+  var groupHero = document.getElementById('pairGroupHero');
   var specBody = document.getElementById('specBody');
   var toolbarEl = document.querySelector('.toolbar');
   var siteNav = document.getElementById('siteNav');
@@ -391,7 +404,18 @@
   updateNavState();
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(syncChromeHeights); }
 
+  var currentPair = null;
+
+  function applyHero(h){
+    var family = h.id === 'auto' ? currentPair.display : h.family;
+    var weight = h.id === 'auto' ? (currentPair.dwLg || currentPair.dw) : h.weight;
+    root.setProperty('--font-hero', family);
+    root.setProperty('--hero-w', weight);
+    document.querySelectorAll('.hero-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.id===h.id); });
+  }
+
   function applyPair(p){
+    currentPair = p;
     root.setProperty('--font-display', p.display);
     root.setProperty('--font-body', p.body);
     root.setProperty('--font-accent', p.accent || p.body);
@@ -399,8 +423,19 @@
     root.setProperty('--display-w-lg', p.dwLg);
     root.setProperty('--head-track', p.track);
     document.querySelectorAll('.pair-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.id===p.id); });
+    applyHero(HERO_FONTS[0]);
     syncChromeHeights();
   }
+
+  HERO_FONTS.forEach(function(h){
+    var btn = document.createElement('button');
+    btn.className = 'pair-btn hero-btn';
+    btn.dataset.id = h.id;
+    btn.textContent = h.label;
+    btn.title = h.note || 'Хиро-заголовок следует за выбранной парой шрифтов';
+    btn.addEventListener('click', function(){ applyHero(h); });
+    groupHero.appendChild(btn);
+  });
 
   var defaultPair = null;
   PAIRS.forEach(function(p){
