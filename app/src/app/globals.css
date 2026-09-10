@@ -41,6 +41,7 @@
   --color-surface: var(--paper-000);
   --color-surface-sunken: var(--paper-050);
   --color-surface-inverse: var(--ink-900);
+  --color-ink-900: var(--ink-900);
   --color-ink-800: var(--ink-800);
   --color-border: var(--paper-200);
   --color-border-strong: var(--ink-600);

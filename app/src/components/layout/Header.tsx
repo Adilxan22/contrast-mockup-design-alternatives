@@ -14,13 +14,25 @@ import { useCart } from "@/lib/cart-context";
 // as real <Link>s once that content exists.
 export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   const { count, open } = useCart();
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
 
   return (
     <header className="sticky top-0 z-40">
       <div className="bg-ink-800 px-5 py-2.5 font-body text-xs text-foreground-on-dark/75 lg:px-10">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-x-6 gap-y-1">
           <span>Astana · ежедневно 10:00–02:00</span>
-          <span className="text-gold-soft">Доставка по городу — уточняйте у менеджера</span>
+          {whatsappNumber ? (
+            <a
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold-soft underline-offset-2 hover:underline"
+            >
+              Доставка по городу — написать в WhatsApp
+            </a>
+          ) : (
+            <span className="text-gold-soft">Доставка по городу — уточняйте у менеджера</span>
+          )}
         </div>
       </div>
 

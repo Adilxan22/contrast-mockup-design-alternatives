@@ -1,4 +1,3 @@
-import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { getCategoryImage } from "@/lib/category-images";
@@ -10,8 +9,6 @@ import { getCategoryImage } from "@/lib/category-images";
 const GRID_CATEGORIES = ["Кальяны", "Табачные смеси для кальяна", "Чаши", "Аксессуары"];
 
 export function Hero() {
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-
   return (
     <div className="grid bg-surface-inverse lg:min-h-[640px] lg:grid-cols-2">
       <div className="flex flex-col justify-center px-5 py-16 lg:px-16 lg:py-0">
@@ -35,17 +32,6 @@ export function Hero() {
           >
             В каталог
           </Link>
-          {whatsappNumber && (
-            <a
-              href={`https://wa.me/${whatsappNumber}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-sm border border-white/40 px-7 py-[15px] font-body text-sm font-semibold text-white transition-transform duration-150 ease-standard hover:scale-[1.02] hover:bg-white/10 active:scale-[0.98]"
-            >
-              <MessageCircle className="size-4" aria-hidden="true" />
-              Написать в WhatsApp
-            </a>
-          )}
         </div>
       </div>
 

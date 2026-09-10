@@ -3,6 +3,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { AgeGate } from "@/components/layout/AgeGate";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { WhatsAppFab } from "@/components/layout/WhatsAppFab";
 import { CartProvider } from "@/lib/cart-context";
 import { getCustomerSession } from "@/lib/customer-auth";
 import "./globals.css";
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
           <CartDrawer />
         </CartProvider>
+        <WhatsAppFab />
       </body>
     </html>
   );
