@@ -1,26 +1,122 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
+/*
+ * Contrast design tokens — the final approved palette + typography, pulled
+ * directly from contrast-mockup-design-alternatives-nine.vercel.app's live
+ * CSS custom properties (2026-09-10; ink/gold/stone/text-muted below are its
+ * --ink/--gold/--stone/--text-muted-2 values, read via getComputedStyle, not
+ * eyeballed). Primitives live in :root; @theme inline maps them to Tailwind's
+ * token namespaces so components use ordinary utilities (bg-surface-sunken,
+ * text-foreground-muted, shadow-card-hover, font-display...).
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink-950: #100e0b;
+  --ink-900: #221d16;
+  --ink-800: #241e15;
+  /* Darkened from the source design's --text-muted (#7c7265, 4.07:1 on
+     --paper-050) to meet WCAG AA 4.5:1 for normal text. */
+  --ink-600: #70675b;
+  /* Darkened from the source design's --text-muted-2 (#8f8570, 3.15:1 on
+     --paper-050 — fails AA outright) for the same reason. */
+  --ink-400: #726a5a;
+  --paper-000: #fbfaf7;
+  --paper-050: #f1eee7;
+  --paper-100: #e7e1d3;
+  --paper-200: #dcd5c5;
+  --gold-300: #e8d2a0;
+  --gold-500: #c79a5b;
+  --gold-600: #b18a50;
+  --gold-700: #9c7a44;
+  --red-500: #9c4a3a;
+  --green-600: #3e7a4a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: "Golos Text", Arial, sans-serif;
+  --font-body: "Onest", Arial, sans-serif;
+
+  /* surfaces */
+  --color-background: var(--paper-000);
+  --color-surface: var(--paper-000);
+  --color-surface-sunken: var(--paper-050);
+  --color-surface-inverse: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-border: var(--paper-200);
+  --color-border-strong: var(--ink-600);
+
+  /* text */
+  --color-foreground: var(--ink-900);
+  --color-foreground-secondary: var(--ink-600);
+  --color-foreground-muted: var(--ink-400);
+  --color-foreground-on-dark: var(--paper-000);
+  --color-foreground-on-dark-muted: rgba(246, 242, 234, 0.64);
+  --color-foreground-accent: var(--gold-600);
+
+  /* accents & state */
+  --color-gold: var(--gold-500);
+  --color-gold-strong: var(--gold-700);
+  --color-gold-soft: var(--gold-300);
+  --color-danger: var(--red-500);
+  --color-danger-soft: rgba(161, 61, 46, 0.1);
+  --color-success: var(--green-600);
+  --color-success-soft: rgba(75, 107, 79, 0.1);
+
+  /* interactive */
+  --color-action-bg: var(--ink-900);
+  --color-action-bg-hover: var(--ink-800);
+  --color-action-fg: var(--paper-000);
+  --color-focus-ring: var(--gold-600);
+
+  /* radii (overrides Tailwind's default rounded-sm/md/lg scale) */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* elevation */
+  --shadow-sm: 0 1px 2px rgba(16, 14, 11, 0.08);
+  --shadow-md: 0 4px 16px rgba(16, 14, 11, 0.1);
+  --shadow-lg: 0 16px 40px rgba(16, 14, 11, 0.14);
+  --shadow-card-hover: 0 12px 32px rgba(16, 14, 11, 0.16);
+
+  --ease-standard: cubic-bezier(0.2, 0.6, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+  }
+
+  /* Golos Text reads thin at display sizes on default (400) weight — the
+     source design sets 600 as its display weight, 700 for large/hero
+     headings (its --display-w / --hero-w tokens). */
+  .font-display {
+    font-weight: 600;
+  }
+
+  a {
+    color: var(--color-foreground-accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-gold-strong);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }

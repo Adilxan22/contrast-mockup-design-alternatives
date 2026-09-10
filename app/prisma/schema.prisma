@@ -1,0 +1,139 @@
+// Тонкий слой поверх Poster: Poster остаётся источником истины для товаров/
+// остатков/клиентов/заказов, здесь — только то, чего в Poster никогда не было
+// (распарсенные атрибуты, сессии, согласие на ПДн, слайды hero, лог заказов).
+// См. docs/ARCHITECTURE.md и план в PROJECT_SPEC.md §2.4.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // Neon's pooled (pgbouncer) connection — right for the app at runtime on
+  // Vercel's serverless functions.
+  url       = env("DATABASE_URL")
+  // Neon's direct (unpooled) connection — pgbouncer doesn't support the
+  // prepared-statement/advisory-lock traffic `prisma migrate` needs. Matches
+  // the var name `neon link`/`neon env pull` write automatically.
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  posterId Int       @unique
+  label    String
+  slug     String    @unique
+  products Product[]
+}
+
+model Product {
+  id                Int      @id @default(autoincrement())
+  posterId          Int      @unique
+  // ingredient_id from the connect account specifically — NOT a cross-branch
+  // join key (each Poster account has its own local numbering, confirmed
+  // against real data), kept only for reference/debugging. BranchStock and
+  // BranchProductId below join by normalized product name instead.
+  ingredientId      Int?
+  categoryId        Int?
+  category          Category? @relation(fields: [categoryId], references: [id])
+  categoryLabel     String
+  name              String
+  priceTenge        Int
+  oldPriceTenge     Int?
+  brand             String?
+  flavor            String?
+  strength          String?
+  packaging         String?
+  needsManualReview Boolean  @default(false)
+  imageUrl          String?
+  active            Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  branchStock     BranchStock[]
+  branchProductIds BranchProductId[]
+
+  @@index([categoryLabel])
+  @@index([brand])
+  @@index([ingredientId])
+}
+
+// Каталог синкается из connect-аккаунта, но product_id (и ingredient_id) там
+// НЕ совпадает с product_id того же товара в каждом филиальном аккаунте —
+// подтверждено на реальных данных: франшиза-синк в Poster никогда не
+// использовалась, у каждого филиала свои внутренние id. Единственное, что
+// совпадает между аккаунтами — название товара. Эта таблица хранит
+// per-branch product_id (нужен для incomingOrders.createIncomingOrder —
+// заказ создаётся в аккаунте конкретного филиала, значит нужен ЕГО id, а
+// не id из connect), полученный сопоставлением по названию при синке остатков.
+model BranchProductId {
+  id              Int     @id @default(autoincrement())
+  productId       Int
+  product         Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  branch          String
+  posterProductId Int
+
+  @@unique([productId, branch])
+}
+
+// branch: "left" | "centre" | "alfarabi" — соответствует суффиксам
+// POSTER_API_TOKEN_LEFT / _CENTRE / _ALFARABI в env.
+model BranchStock {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  branch    String
+  quantity  Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, branch])
+}
+
+model HeroSlide {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String
+  linkUrl   String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// Локальный лог заказов, созданных в Poster через incomingOrders.createIncomingOrder —
+// нужен для истории уведомлений и как резерв, если сам Poster недоступен на записи.
+model Order {
+  id               Int      @id @default(autoincrement())
+  branch           String
+  posterOrderId    Int?
+  customerName     String
+  customerPhone    String
+  items            Json
+  deliveryType     String
+  address          String?
+  totalTenge       Int
+  status           String   @default("new")
+  whatsappNotified Boolean  @default(false)
+  createdAt        DateTime @default(now())
+
+  @@index([customerPhone])
+}
+
+model Consent {
+  id          Int      @id @default(autoincrement())
+  phone       String
+  textVersion String
+  consentedAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+// Личный кабинет: вход по телефону, OTP отложен (см. lib/customer-auth.ts —
+// OtpProvider сейчас DevNoOpOtpProvider). Токен — сессионная cookie.
+model CustomerSession {
+  id        Int      @id @default(autoincrement())
+  phone     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
