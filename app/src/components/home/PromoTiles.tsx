@@ -4,9 +4,13 @@ import { Container } from "@/components/ui/Container";
 // Two editorial cards under the category row — ported from the approved
 // prototype's `.promo-wrap` (replaces the old unrelated "STEAM10" discount-code
 // banner, which the client flagged as appearing with no explained context).
-// Copy here is placeholder scaffolding, not confirmed marketing content —
-// swap for real current promos/loyalty terms once Алуа signs off on them.
-export function PromoTiles() {
+// The "Карта Contrast" copy is still placeholder scaffolding, not confirmed
+// marketing content — swap for real current promos/loyalty terms once Алуа
+// signs off on them. The "Ассортимент" count isn't: it's the live in-stock
+// total (was hardcoded "400+", audit 2026-09-10 — real count is ~1700+).
+export function PromoTiles({ productCount }: { productCount: number }) {
+  const roundedCount = Math.floor(productCount / 100) * 100;
+
   return (
     <Container className="grid gap-3 pt-6 pb-10 sm:grid-cols-2 lg:pb-16">
       <Link
@@ -18,7 +22,7 @@ export function PromoTiles() {
             Ассортимент
           </div>
           <h3 className="font-display text-2xl font-semibold text-foreground">
-            400+ позиций в наличии
+            {roundedCount}+ позиций в наличии
           </h3>
         </div>
         <span className="shrink-0 font-body text-sm text-foreground-secondary group-hover:text-foreground">

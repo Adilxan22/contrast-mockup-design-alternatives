@@ -18,7 +18,11 @@ import type { Category, Product } from "./types";
 // client's existing site (hookahmarket.ps.me has no drinks in its catalog).
 // It's for in-venue lounge service, not delivery/pickup orders — excluded
 // from the public site entirely rather than built out as a category.
-const EXCLUDED_CATEGORIES = new Set(["Lounge"]);
+// "Top screen" is register-side POS scaffolding, not products — checked its
+// two SKUs directly (audit 2026-09-10): "Доставка" (a delivery-fee line item)
+// and "Табак Вес" (a per-gram loose-tobacco pricing helper for staff at the
+// till). Neither is something a customer should be able to add to cart.
+const EXCLUDED_CATEGORIES = new Set(["Lounge", "Top screen"]);
 
 function toUiProduct(row: {
   id: number;

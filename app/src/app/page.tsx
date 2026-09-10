@@ -15,9 +15,9 @@ export default async function Home() {
 
   return (
     <>
-      <Hero />
+      <Hero productCount={products.length} />
       <CategoryPills categories={categories} />
-      <PromoTiles />
+      <PromoTiles productCount={products.length} />
       <PromoSlides slides={heroSlides} />
       <TrendingSection products={products} />
     </>

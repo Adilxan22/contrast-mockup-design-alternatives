@@ -8,7 +8,12 @@ import { getCategoryImage } from "@/lib/category-images";
 // photo grid right, dark background, gold-gradient primary CTA.
 const GRID_CATEGORIES = ["Кальяны", "Табачные смеси для кальяна", "Чаши", "Аксессуары"];
 
-export function Hero() {
+export function Hero({ productCount }: { productCount: number }) {
+  // Rounded down to a clean hundred, same convention as the "400+" it
+  // replaces — was a hardcoded guess (real in-stock count is ~1700+, audit
+  // 2026-09-10), now reads live so it can't drift stale again.
+  const roundedCount = Math.floor(productCount / 100) * 100;
+
   return (
     <div className="grid bg-surface-inverse lg:min-h-[640px] lg:grid-cols-2">
       <div className="flex flex-col justify-center px-5 py-16 lg:px-16 lg:py-0">
@@ -21,8 +26,8 @@ export function Hero() {
           На вашей стороне.
         </h1>
         <p className="mt-5 max-w-[440px] font-body text-base text-[#CFC5B2]">
-          От первой пробы до полного сетапа — оригинальный табак, угли и аксессуары, 400+ позиций в
-          наличии.
+          От первой пробы до полного сетапа — оригинальный табак, угли и аксессуары, {roundedCount}+
+          позиций в наличии.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link

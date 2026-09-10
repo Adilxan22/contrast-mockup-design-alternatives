@@ -47,9 +47,29 @@ export function CatalogClient({
   if (initialCategory !== prevInitialCategory) {
     setPrevInitialCategory(initialCategory);
     setCategory(initialCategory ?? null);
+    setBrands([]);
+    setStrengths([]);
+    setPackagings([]);
   }
 
-  const allBrands = useMemo(() => [...new Set(products.map((p) => p.brand).filter(Boolean))], [products]);
+  // Facet options scoped to the selected category, not the whole catalog —
+  // otherwise picking "Кальяны" still listed tobacco brands (Al Fakher,
+  // Adalya...) that don't exist on a single hookah, while accessories/bowls/
+  // hookahs/cigars/coals never got a brand parsed from Poster at all (see
+  // lib/poster/parser.ts) and so always showed an empty, useless "Бренд"
+  // list (audit 2026-09-10). Hiding the section when it has no options, and
+  // resetting stale brand/strength/packaging picks on category change (below),
+  // are the other halves of this fix — a leftover pick from a previous
+  // category would otherwise silently zero out every result.
+  const categoryProducts = useMemo(
+    () => (category ? products.filter((p) => p.category === category) : products),
+    [products, category]
+  );
+
+  const allBrands = useMemo(
+    () => [...new Set(categoryProducts.map((p) => p.brand).filter(Boolean))],
+    [categoryProducts]
+  );
   const matchingBrands = useMemo(
     () => allBrands.filter((b) => b.toLowerCase().includes(brandQuery.toLowerCase())),
     [allBrands, brandQuery]
@@ -57,16 +77,25 @@ export function CatalogClient({
   const visibleBrands =
     brandsExpanded || brandQuery ? matchingBrands : matchingBrands.slice(0, BRAND_COLLAPSE_COUNT);
   const allStrengths = useMemo(
-    () => [...new Set(products.map((p) => p.strength).filter((v): v is string => Boolean(v)))],
-    [products]
+    () => [...new Set(categoryProducts.map((p) => p.strength).filter((v): v is string => Boolean(v)))],
+    [categoryProducts]
   );
   const allPackagings = useMemo(
-    () => [...new Set(products.map((p) => p.packaging).filter((v): v is string => Boolean(v)))],
-    [products]
+    () => [...new Set(categoryProducts.map((p) => p.packaging).filter((v): v is string => Boolean(v)))],
+    [categoryProducts]
   );
 
   const toggle = (setter: (updater: (prev: string[]) => string[]) => void, value: string) =>
     setter((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
+
+  const changeCategory = (value: string | null) => {
+    setCategory(value);
+    setBrands([]);
+    setStrengths([]);
+    setPackagings([]);
+    setBrandQuery("");
+    setBrandsExpanded(false);
+  };
 
   const min = priceMin ? Number(priceMin) : null;
   const max = priceMax ? Number(priceMax) : null;
@@ -94,11 +123,11 @@ export function CatalogClient({
       <div className="mb-6">
         <h1 className="mb-4 font-display text-3xl text-foreground lg:text-5xl">Каталог</h1>
         <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollbarWidth: "thin" }}>
-          <Tag selected={!category} onClick={() => setCategory(null)}>
+          <Tag selected={!category} onClick={() => changeCategory(null)}>
             Все
           </Tag>
           {categories.map((c) => (
-            <Tag key={c.id} selected={category === c.label} onClick={() => setCategory(c.label)}>
+            <Tag key={c.id} selected={category === c.label} onClick={() => changeCategory(c.label)}>
               {c.label}
             </Tag>
           ))}
@@ -116,45 +145,47 @@ export function CatalogClient({
               icon={<Search className="size-4" aria-hidden="true" />}
             />
           </div>
-          <div>
-            <div className="mb-3 font-body text-xs tracking-wide text-foreground-secondary uppercase">
-              Бренд
-            </div>
-            {allBrands.length > BRAND_COLLAPSE_COUNT && (
-              <div className="mb-3">
-                <Input
-                  name="brand-search"
-                  placeholder="Поиск по бренду"
-                  value={brandQuery}
-                  onChange={(e) => setBrandQuery(e.target.value)}
-                  icon={<Search className="size-4" aria-hidden="true" />}
-                />
+          {allBrands.length > 0 && (
+            <div>
+              <div className="mb-3 font-body text-xs tracking-wide text-foreground-secondary uppercase">
+                Бренд
               </div>
-            )}
-            <div className="flex flex-row flex-wrap gap-3 lg:flex-col">
-              {visibleBrands.map((b) => (
-                <Checkbox
-                  key={b}
-                  label={b}
-                  checked={brands.includes(b)}
-                  onChange={() => toggle(setBrands, b)}
-                  count={products.filter((p) => p.brand === b).length}
-                />
-              ))}
-              {visibleBrands.length === 0 && (
-                <span className="font-body text-sm text-foreground-muted">Бренды не найдены</span>
+              {allBrands.length > BRAND_COLLAPSE_COUNT && (
+                <div className="mb-3">
+                  <Input
+                    name="brand-search"
+                    placeholder="Поиск по бренду"
+                    value={brandQuery}
+                    onChange={(e) => setBrandQuery(e.target.value)}
+                    icon={<Search className="size-4" aria-hidden="true" />}
+                  />
+                </div>
+              )}
+              <div className="flex flex-row flex-wrap gap-3 lg:flex-col">
+                {visibleBrands.map((b) => (
+                  <Checkbox
+                    key={b}
+                    label={b}
+                    checked={brands.includes(b)}
+                    onChange={() => toggle(setBrands, b)}
+                    count={categoryProducts.filter((p) => p.brand === b).length}
+                  />
+                ))}
+                {visibleBrands.length === 0 && (
+                  <span className="font-body text-sm text-foreground-muted">Бренды не найдены</span>
+                )}
+              </div>
+              {!brandQuery && matchingBrands.length > BRAND_COLLAPSE_COUNT && (
+                <button
+                  type="button"
+                  onClick={() => setBrandsExpanded((prev) => !prev)}
+                  className="mt-3 font-body text-sm text-foreground-secondary underline underline-offset-2 transition-colors duration-150 ease-standard hover:text-foreground"
+                >
+                  {brandsExpanded ? "Свернуть" : `Показать все (${matchingBrands.length})`}
+                </button>
               )}
             </div>
-            {!brandQuery && matchingBrands.length > BRAND_COLLAPSE_COUNT && (
-              <button
-                type="button"
-                onClick={() => setBrandsExpanded((prev) => !prev)}
-                className="mt-3 font-body text-sm text-foreground-secondary underline underline-offset-2 transition-colors duration-150 ease-standard hover:text-foreground"
-              >
-                {brandsExpanded ? "Свернуть" : `Показать все (${matchingBrands.length})`}
-              </button>
-            )}
-          </div>
+          )}
 
           {allStrengths.length > 0 && (
             <div>
