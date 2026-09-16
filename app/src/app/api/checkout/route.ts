@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getBranchAvailability, getProductById } from "@/lib/catalog";
+import { getBranchAvailability, getProductsByIds } from "@/lib/catalog";
 import { hasDatabase, prisma } from "@/lib/db";
 import { parsePrice } from "@/lib/format";
 import { normalizePhone } from "@/lib/phone";
@@ -71,18 +71,20 @@ export async function POST(req: Request) {
   }
 
   // Re-resolve every item against the real catalog server-side — the client
-  // sends only ids/quantities, never trusted for price or stock.
-  const resolvedItems = await Promise.all(
-    input.items.map(async (it) => {
-      const product = await getProductById(it.productId);
-      if (!product) return null;
-      return { product, quantity: Math.min(it.quantity, product.stock) };
-    })
-  );
+  // sends only ids/quantities, never trusted for price or stock. One batched
+  // lookup instead of one full-catalog query per cart item (caught
+  // 2026-09-17 chasing a Neon data-transfer quota exhaustion).
+  const resolvedProducts = await getProductsByIds(input.items.map((it) => it.productId));
+  const productById = new Map(resolvedProducts.map((p) => [p.id, p]));
+  const resolvedItems = input.items.map((it) => {
+    const product = productById.get(it.productId);
+    if (!product) return null;
+    return { product, quantity: Math.min(it.quantity, product.stock) };
+  });
   if (resolvedItems.some((r) => r === null || r.quantity <= 0)) {
     return NextResponse.json({ error: "product_unavailable" }, { status: 400 });
   }
-  const items = resolvedItems as { product: NonNullable<Awaited<ReturnType<typeof getProductById>>>; quantity: number }[];
+  const items = resolvedItems as { product: NonNullable<(typeof resolvedItems)[number]>["product"]; quantity: number }[];
 
   // Stock is per-branch (see BranchProductId's schema comment for why) — the
   // client already filters the branch picker to ones with full availability,

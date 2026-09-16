@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { clearAdminSession, createAdminSession, requireAdmin, verifyAdminPassword } from "@/lib/admin-auth";
 import { hasDatabase, prisma } from "@/lib/db";
 import { getProducts, posterPhotoUrl } from "@/lib/poster/api";
@@ -38,6 +38,10 @@ export async function updateProductAttributes(
   });
   revalidatePath("/admin/catalog");
   revalidatePath("/catalog");
+  // /catalog, / and sitemap.ts read through a 60s cache (see lib/catalog.ts)
+  // that revalidatePath alone doesn't touch — bust it so the edit shows up
+  // immediately instead of up to a minute later.
+  updateTag("catalog");
 }
 
 export async function setProductImage(productId: number, imageUrl: string): Promise<void> {
@@ -53,6 +57,7 @@ export async function setProductImage(productId: number, imageUrl: string): Prom
   revalidatePath("/admin/products");
   revalidatePath("/catalog");
   revalidatePath("/product/[id]", "page");
+  updateTag("catalog");
 }
 
 /**
@@ -80,6 +85,7 @@ export async function resetProductImageToPoster(productId: number): Promise<{ im
   revalidatePath("/admin/products");
   revalidatePath("/catalog");
   revalidatePath("/product/[id]", "page");
+  updateTag("catalog");
   return { imageUrl: photoUrl };
 }
 

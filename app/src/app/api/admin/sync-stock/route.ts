@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
 import { isCronAuthenticated } from "@/lib/cron-auth";
@@ -75,6 +76,10 @@ async function runSync(): Promise<NextResponse> {
         return true;
       });
     }
+
+    // Stock feeds the catalog's per-product `stock` field (see lib/catalog.ts's
+    // 60s cache) — bust it so a stock sync shows up immediately.
+    revalidateTag("catalog", { expire: 0 });
 
     return NextResponse.json({
       ok: true,

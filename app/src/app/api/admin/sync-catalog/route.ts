@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
 import { isCronAuthenticated } from "@/lib/cron-auth";
@@ -127,6 +128,11 @@ async function runSync(): Promise<NextResponse> {
         else updated++;
       }
     }
+
+    // Catalog reads are cached for up to 60s (see lib/catalog.ts) — bust it
+    // now so a sync (nightly cron or the admin's manual button) is visible
+    // immediately instead of up to a minute later.
+    revalidateTag("catalog", { expire: 0 });
 
     return NextResponse.json({
       ok: true,

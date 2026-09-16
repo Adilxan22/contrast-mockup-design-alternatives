@@ -1,4 +1,6 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
 import { CATEGORIES as MOCK_CATEGORIES, PRODUCTS as MOCK_PRODUCTS } from "./data";
 import { hasDatabase, prisma } from "./db";
 import { formatPrice } from "./format";
@@ -58,14 +60,30 @@ function toUiProduct(row: {
 
 let dbCatalogEmptyWarned = false;
 
-async function readDbProducts(): Promise<Product[] | null> {
-  if (!hasDatabase) return null;
-  try {
-    const rows = await prisma.product.findMany({
+// Full-catalog reads (home, catalog page, sitemap) are the only ones that
+// legitimately need every row — cached for a short window so N visitors (or
+// crawlers) hitting the site inside that window share one Postgres round
+// trip instead of one each. Deliberately NOT wrapped around the mock
+// fallback: the wrapped function must throw (not swallow) on a DB error, or
+// Next would cache "failed, here's null" for the same window — see the
+// try/catch in readDbProducts below, which stays outside the cache.
+// Tagged "catalog" so admin mutations (photo/attribute edits, Poster syncs)
+// can invalidate on demand with revalidateTag instead of waiting it out.
+const getCachedCatalogRows = unstable_cache(
+  () =>
+    prisma.product.findMany({
       where: { active: true, categoryLabel: { notIn: [...EXCLUDED_CATEGORIES] } },
       include: { branchStock: true },
       orderBy: { id: "asc" },
-    });
+    }),
+  ["catalog-products"],
+  { tags: ["catalog"], revalidate: 60 }
+);
+
+async function readDbProducts(): Promise<Product[] | null> {
+  if (!hasDatabase) return null;
+  try {
+    const rows = await getCachedCatalogRows();
     if (rows.length === 0) {
       if (!dbCatalogEmptyWarned) {
         console.warn("[catalog] DATABASE_URL is set but no products are synced yet — serving mock catalog. Run /api/admin/sync-catalog once Poster tokens are configured.");
@@ -85,15 +103,63 @@ export async function getProducts(): Promise<Product[]> {
   return (await readDbProducts()) ?? MOCK_PRODUCTS;
 }
 
-export async function getProductById(id: number): Promise<Product | undefined> {
-  const dbProducts = await readDbProducts();
-  if (dbProducts) return dbProducts.find((p) => p.id === id);
-  return MOCK_PRODUCTS.find((p) => p.id === id);
+// Looked up directly by primary key instead of scanning the full catalog —
+// a product page used to cost a ~1700-row-with-joins query just to find one
+// row (caught 2026-09-17 chasing a Neon data-transfer quota exhaustion).
+// Wrapped in React's cache() so generateMetadata and the page body — both
+// call this with the same id during one render — share a single query.
+export const getProductById = cache(async (id: number): Promise<Product | undefined> => {
+  if (!hasDatabase) return MOCK_PRODUCTS.find((p) => p.id === id);
+  try {
+    const row = await prisma.product.findUnique({ where: { id }, include: { branchStock: true } });
+    if (!row || !row.active || EXCLUDED_CATEGORIES.has(row.categoryLabel)) return undefined;
+    const product = toUiProduct(row);
+    return product.stock > 0 ? product : undefined;
+  } catch (err) {
+    console.error("[catalog] DB product read failed, falling back to mock catalog:", err);
+    return MOCK_PRODUCTS.find((p) => p.id === id);
+  }
+});
+
+// Batched lookup for checkout, which needs several specific products by id
+// in one request — one `IN` query instead of one full-catalog query per cart
+// item (checkout used to call the old getProductById per item, see above).
+export async function getProductsByIds(ids: number[]): Promise<Product[]> {
+  if (ids.length === 0) return [];
+  if (!hasDatabase) return MOCK_PRODUCTS.filter((p) => ids.includes(p.id));
+  try {
+    const rows = await prisma.product.findMany({
+      where: { id: { in: ids }, active: true, categoryLabel: { notIn: [...EXCLUDED_CATEGORIES] } },
+      include: { branchStock: true },
+    });
+    return rows.map(toUiProduct).filter((p) => p.stock > 0);
+  } catch (err) {
+    console.error("[catalog] DB batch product read failed, falling back to mock catalog:", err);
+    return MOCK_PRODUCTS.filter((p) => ids.includes(p.id));
+  }
 }
 
+// Same-category lookup instead of pulling the whole catalog to filter in
+// JS — a product page no longer needs a second full-catalog query just to
+// find 4 related items.
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
-  const all = await getProducts();
-  return all.filter((p) => p.category === product.category && p.id !== product.id).slice(0, limit);
+  if (!hasDatabase) {
+    return MOCK_PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, limit);
+  }
+  try {
+    const rows = await prisma.product.findMany({
+      where: { categoryLabel: product.category, active: true, id: { not: product.id } },
+      include: { branchStock: true },
+      orderBy: { id: "asc" },
+      // over-fetch: some of these will be filtered out below for being
+      // out of stock, so asking for exactly `limit` would under-fill
+      take: limit * 5,
+    });
+    return rows.map(toUiProduct).filter((p) => p.stock > 0).slice(0, limit);
+  } catch (err) {
+    console.error("[catalog] DB related-products read failed, falling back to mock catalog:", err);
+    return MOCK_PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, limit);
+  }
 }
 
 const BRANCHES = ["left", "centre", "alfarabi"] as const;
@@ -127,10 +193,19 @@ export async function getBranchAvailability(
   );
 }
 
+// Same short-lived cache + tag as getCachedCatalogRows above, for the same
+// reason: every page that renders the category nav was re-querying this on
+// every request.
+const getCachedCategoryRows = unstable_cache(
+  () => prisma.category.findMany({ orderBy: { label: "asc" } }),
+  ["catalog-categories"],
+  { tags: ["catalog"], revalidate: 60 }
+);
+
 export async function getCategories(): Promise<Category[]> {
   if (hasDatabase) {
     try {
-      const rows = await prisma.category.findMany({ orderBy: { label: "asc" } });
+      const rows = await getCachedCategoryRows();
       const filtered = rows.filter((r) => !EXCLUDED_CATEGORIES.has(r.label));
       if (filtered.length > 0) return filtered.map((r) => ({ id: r.slug, label: r.label }));
     } catch (err) {
