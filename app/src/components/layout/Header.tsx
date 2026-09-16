@@ -69,7 +69,7 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
             </form>
           )}
 
-          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+          <div className="ml-auto flex items-center gap-2">
             {!isCatalogPage && (
               <Tooltip label="Поиск по каталогу">
                 <Link
