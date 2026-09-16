@@ -42,25 +42,21 @@ export function CatalogClient({
 
   const BRAND_COLLAPSE_COUNT = 8;
 
-  // Re-derive the selected tag when the URL's ?category= changes (e.g. clicking a
-  // header/footer category link while already on /catalog) — adjusted during
-  // render, per React's guidance, instead of in an effect.
-  const [prevInitialCategory, setPrevInitialCategory] = useState(initialCategory);
-  if (initialCategory !== prevInitialCategory) {
-    setPrevInitialCategory(initialCategory);
-    setCategory(initialCategory ?? null);
-    setBrands([]);
-    setStrengths([]);
-    setPackagings([]);
-  }
-
-  // Same re-derive-on-render trick for ?q= — lets the header's search field
-  // (a real <form>, not client state) hand off a query when it navigates to
-  // /catalog while already on it.
-  const [prevInitialQuery, setPrevInitialQuery] = useState(initialQuery);
-  if (initialQuery !== prevInitialQuery) {
-    setPrevInitialQuery(initialQuery);
-    setQuery(initialQuery ?? "");
+  // Re-derive category/query from the URL when they change (e.g. clicking a
+  // header/footer category link, or submitting the header's search form,
+  // while already on /catalog) — adjusted during render, per React's
+  // guidance, instead of in an effect. Category reset also clears the
+  // now-stale facet picks; query doesn't touch them.
+  const [prevInitial, setPrevInitial] = useState({ category: initialCategory, query: initialQuery });
+  if (initialCategory !== prevInitial.category || initialQuery !== prevInitial.query) {
+    if (initialCategory !== prevInitial.category) {
+      setCategory(initialCategory ?? null);
+      setBrands([]);
+      setStrengths([]);
+      setPackagings([]);
+    }
+    if (initialQuery !== prevInitial.query) setQuery(initialQuery ?? "");
+    setPrevInitial({ category: initialCategory, query: initialQuery });
   }
 
   // Facet options scoped to the selected category, not the whole catalog —
