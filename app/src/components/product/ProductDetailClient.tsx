@@ -8,7 +8,6 @@ import { ProductCard } from "@/components/commerce/ProductCard";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
-import { Tabs } from "@/components/ui/Tabs";
 import { useCart } from "@/lib/cart-context";
 import { getCategoryImage } from "@/lib/category-images";
 import type { Product } from "@/lib/types";
@@ -18,12 +17,10 @@ import type { Product } from "@/lib/types";
 // real description to show. A previous version filled the gap with one
 // hardcoded paragraph for every product ("Насыщенный вкус, стабильные
 // характеристики") — shipped on things like lighter fluid, which made it
-// actively wrong rather than just generic (caught 2026-09-10). Characteristics
-// is the tab with real, product-specific data, so it opens by default.
-const TABS = [
-  { id: "specs", label: "Характеристики" },
-  { id: "reviews", label: "Отзывы" },
-];
+// actively wrong rather than just generic (caught 2026-09-10).
+// No "Отзывы" tab either: there is nowhere on the site for a customer to
+// actually leave a review, so it only ever showed "Пока нет отзывов" —
+// removed rather than left as a dead promise (caught 2026-09-16).
 
 export function ProductDetailClient({
   product,
@@ -33,7 +30,6 @@ export function ProductDetailClient({
   related: Product[];
 }) {
   const [qty, setQty] = useState(1);
-  const [tab, setTab] = useState("specs");
   const [justAdded, setJustAdded] = useState(false);
   const { addItem } = useCart();
   const categoryImage = getCategoryImage(product.category);
@@ -109,18 +105,15 @@ export function ProductDetailClient({
               )}
             </Button>
           </div>
-          <Tabs tabs={TABS} active={tab} onChange={setTab} />
-          <div className="py-5 font-body text-base leading-relaxed text-foreground-secondary">
-            {tab === "specs" && (
-              <ul className="list-disc space-y-1 pl-5">
-                {product.brand && <li>Бренд: {product.brand}</li>}
-                {product.flavor && <li>Вкус: {product.flavor}</li>}
-                {product.strength && <li>Крепость: {product.strength}</li>}
-                {product.packaging && <li>Фасовка: {product.packaging}</li>}
-                <li>Остаток: {product.stock} шт</li>
-              </ul>
-            )}
-            {tab === "reviews" && <p>Пока нет отзывов.</p>}
+          <div className="border-t border-border py-5">
+            <h2 className="mb-3 font-body text-base text-foreground">Характеристики</h2>
+            <ul className="list-disc space-y-1 pl-5 font-body text-base leading-relaxed text-foreground-secondary">
+              {product.brand && <li>Бренд: {product.brand}</li>}
+              {product.flavor && <li>Вкус: {product.flavor}</li>}
+              {product.strength && <li>Крепость: {product.strength}</li>}
+              {product.packaging && <li>Фасовка: {product.packaging}</li>}
+              <li>Остаток: {product.stock} шт</li>
+            </ul>
           </div>
         </div>
       </div>
