@@ -37,7 +37,8 @@ export async function clearAdminSession(): Promise<void> {
   store.delete(COOKIE_NAME);
 }
 
-export async function isAdminAuthenticated(): Promise<boolean> {
+/** Throws-free guard for use at the top of admin server components/route handlers. */
+export async function requireAdmin(): Promise<boolean> {
   const store = await cookies();
   const token = store.get(COOKIE_NAME)?.value;
   if (!token) return false;
@@ -45,9 +46,4 @@ export async function isAdminAuthenticated(): Promise<boolean> {
   if (!value) return false;
   const expiresAt = Number(value.split(".")[1]);
   return Number.isFinite(expiresAt) && Date.now() < expiresAt;
-}
-
-/** Throws-free guard for use at the top of admin server components/route handlers. */
-export async function requireAdmin(): Promise<boolean> {
-  return isAdminAuthenticated();
 }

@@ -1,10 +1,8 @@
 import type { ReactNode } from "react";
 
-type Tone = "neutral" | "gold" | "danger" | "danger-solid" | "success" | "dark";
+type Tone = "danger" | "danger-solid" | "success";
 
 const toneClasses: Record<Tone, string> = {
-  neutral: "bg-surface-sunken text-foreground-secondary",
-  gold: "bg-gold-soft/25 text-gold-strong",
   danger: "bg-danger-soft text-danger",
   // Opaque version of "danger" — the translucent tint reads fine on the
   // plain page background but nearly disappears over a product photo, since
@@ -12,14 +10,13 @@ const toneClasses: Record<Tone, string> = {
   // Use this instead wherever the badge sits on top of an image.
   "danger-solid": "bg-danger text-white shadow-sm",
   success: "bg-success-soft text-success",
-  dark: "bg-surface-inverse text-foreground-on-dark",
 };
 
 export function Badge({
-  tone = "neutral",
+  tone,
   children,
 }: {
-  tone?: Tone;
+  tone: Tone;
   children: ReactNode;
 }) {
   return (

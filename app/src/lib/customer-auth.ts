@@ -6,10 +6,8 @@ import { sign, verify } from "./signed-token";
 
 // Personal cabinet auth, matching docs/ARCHITECTURE.md §3: phone number is the
 // identifier, no password. Real OTP delivery (SMS/WhatsApp) was explicitly
-// deferred by the client — see OtpProvider below — so login currently succeeds
-// immediately after a phone number is entered. Swapping in a real provider later
-// only means implementing OtpProvider and changing one line in requestOtp/
-// verifyOtp; nothing in the route/UI layer needs to change.
+// deferred by the client, so login currently succeeds immediately after a
+// phone number is entered — no code is sent or checked.
 //
 // The session itself lives in a signed cookie (like lib/admin-auth.ts), not a DB
 // row — so login works even before DATABASE_URL is configured, same as every
@@ -19,24 +17,6 @@ import { sign, verify } from "./signed-token";
 
 const COOKIE_NAME = "contrast_session";
 const SESSION_DAYS = 30;
-
-export interface OtpProvider {
-  /** Sends (or, for the dev provider, skips sending) a one-time code. */
-  send(phone: string): Promise<void>;
-  /** Verifies a code the customer entered. Dev provider accepts anything. */
-  verify(phone: string, code: string): Promise<boolean>;
-}
-
-class DevNoOpOtpProvider implements OtpProvider {
-  async send(): Promise<void> {
-    // Intentionally does nothing — see module doc comment.
-  }
-  async verify(): Promise<boolean> {
-    return true;
-  }
-}
-
-export const otpProvider: OtpProvider = new DevNoOpOtpProvider();
 
 /** Called after the customer submits the phone (and, once real OTP lands, the code). */
 export async function createCustomerSession(rawPhone: string): Promise<string> {

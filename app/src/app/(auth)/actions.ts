@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { clearCustomerSession, createCustomerSession, otpProvider } from "@/lib/customer-auth";
+import { clearCustomerSession, createCustomerSession } from "@/lib/customer-auth";
 
 export async function loginCustomer(
   _prev: { error?: string } | undefined,
@@ -10,9 +10,8 @@ export async function loginCustomer(
   const phone = String(formData.get("phone") ?? "").trim();
   if (phone.length < 6) return { error: "Введите номер телефона" };
 
-  // otpProvider is DevNoOpOtpProvider for now (real SMS/WhatsApp OTP deferred —
-  // see lib/customer-auth.ts) — send() is a no-op, login succeeds immediately.
-  await otpProvider.send(phone);
+  // Real SMS/WhatsApp OTP deferred by the client (see lib/customer-auth.ts) —
+  // login succeeds immediately after a phone number is entered.
   await createCustomerSession(phone);
   redirect("/account");
 }
