@@ -7,10 +7,28 @@ import { CartProvider } from "@/lib/cart-context";
 import { getCustomerSession } from "@/lib/customer-auth";
 import "./globals.css";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://contrast.example.kz";
+const TITLE = "Contrast — Premium Hookah Shop";
+const DESCRIPTION =
+  "Кальяны, табак, бестабачные смеси и аксессуары для тех, кто ценит вкус, качество и атмосферу. Astana.";
+
 export const metadata: Metadata = {
-  title: "Contrast — Premium Hookah Shop",
-  description:
-    "Кальяны, табак, бестабачные смеси и аксессуары для тех, кто ценит вкус, качество и атмосферу. Astana.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Contrast",
+    locale: "ru_RU",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
