@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { clearAdminSession, createAdminSession, requireAdmin, verifyAdminPassword } from "@/lib/admin-auth";
 import { hasDatabase, prisma } from "@/lib/db";
+import { getProducts, posterPhotoUrl } from "@/lib/poster/api";
 
 export async function loginAdmin(formData: FormData): Promise<{ error?: string }> {
   const password = String(formData.get("password") ?? "");
@@ -52,6 +53,34 @@ export async function setProductImage(productId: number, imageUrl: string): Prom
   revalidatePath("/admin/products");
   revalidatePath("/catalog");
   revalidatePath("/product/[id]", "page");
+}
+
+/**
+ * Un-does setProductImage's "manual" tag so the next catalog sync is free to
+ * overwrite this product's photo again. Also pulls the product's current
+ * photo from Poster right away, rather than leaving the row photo-less (or
+ * stale) until the nightly cron runs — see the schema comment on
+ * Product.imageSource for why manual rows are otherwise protected.
+ */
+export async function resetProductImageToPoster(productId: number): Promise<{ imageUrl: string | null }> {
+  if (!(await requireAdmin())) redirect("/admin/login");
+  if (!hasDatabase) return { imageUrl: null };
+
+  const product = await prisma.product.findUnique({ where: { id: productId }, select: { posterId: true } });
+  if (!product) return { imageUrl: null };
+
+  const products = await getProducts();
+  const posterProduct = products.find((p) => Number(p.product_id) === product.posterId);
+  const photoUrl = posterProduct ? posterPhotoUrl(posterProduct) : null;
+
+  await prisma.product.update({
+    where: { id: productId },
+    data: { imageUrl: photoUrl, imageSource: photoUrl ? "poster" : null },
+  });
+  revalidatePath("/admin/products");
+  revalidatePath("/catalog");
+  revalidatePath("/product/[id]", "page");
+  return { imageUrl: photoUrl };
 }
 
 export async function createHeroSlide(formData: FormData): Promise<{ error?: string }> {
