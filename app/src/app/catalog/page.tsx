@@ -21,11 +21,18 @@ export default async function CatalogPage({
   const params = await searchParams;
   const categoryParam = params.category;
   const initialCategory = Array.isArray(categoryParam) ? categoryParam[0] : categoryParam;
+  const queryParam = params.q;
+  const initialQuery = Array.isArray(queryParam) ? queryParam[0] : queryParam;
   const [categories, products] = await Promise.all([getCategories(), getProducts()]);
 
   return (
     <Container>
-      <CatalogClient initialCategory={initialCategory} categories={categories} products={products} />
+      <CatalogClient
+        initialCategory={initialCategory}
+        initialQuery={initialQuery}
+        categories={categories}
+        products={products}
+      />
     </Container>
   );
 }

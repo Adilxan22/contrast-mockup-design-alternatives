@@ -44,13 +44,22 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
             </Link>
           </nav>
 
-          <Link
-            href="/catalog"
-            className="hidden min-w-0 flex-1 items-center gap-2 rounded-sm border border-border bg-surface-sunken px-4 py-2.5 font-body text-sm text-foreground-muted transition-colors duration-150 ease-standard hover:border-border-strong lg:flex"
+          <form
+            action="/catalog"
+            className="hidden min-w-0 flex-1 items-center gap-2 rounded-sm border border-border bg-surface-sunken px-4 py-2.5 transition-colors duration-150 ease-standard focus-within:border-border-strong hover:border-border-strong lg:flex"
           >
-            <Search className="size-4 shrink-0" aria-hidden="true" />
-            Поиск по каталогу
-          </Link>
+            <Search className="size-4 shrink-0 text-foreground-muted" aria-hidden="true" />
+            <input
+              type="text"
+              name="q"
+              placeholder="Поиск по каталогу"
+              aria-label="Поиск по каталогу"
+              className="w-full min-w-0 bg-transparent font-body text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
+            />
+            <button type="submit" className="sr-only">
+              Найти
+            </button>
+          </form>
 
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <Tooltip label="Поиск по каталогу">

@@ -20,10 +20,12 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 
 export function CatalogClient({
   initialCategory,
+  initialQuery,
   categories,
   products,
 }: {
   initialCategory?: string;
+  initialQuery?: string;
   categories: Category[];
   products: Product[];
 }) {
@@ -33,7 +35,7 @@ export function CatalogClient({
   const [packagings, setPackagings] = useState<string[]>([]);
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery ?? "");
   const [sort, setSort] = useState<SortOption>("popular");
   const [brandQuery, setBrandQuery] = useState("");
   const [brandsExpanded, setBrandsExpanded] = useState(false);
@@ -50,6 +52,15 @@ export function CatalogClient({
     setBrands([]);
     setStrengths([]);
     setPackagings([]);
+  }
+
+  // Same re-derive-on-render trick for ?q= — lets the header's search field
+  // (a real <form>, not client state) hand off a query when it navigates to
+  // /catalog while already on it.
+  const [prevInitialQuery, setPrevInitialQuery] = useState(initialQuery);
+  if (initialQuery !== prevInitialQuery) {
+    setPrevInitialQuery(initialQuery);
+    setQuery(initialQuery ?? "");
   }
 
   // Facet options scoped to the selected category, not the whole catalog —
