@@ -2,6 +2,7 @@
 
 import { MessageCircle, Search, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { useCart } from "@/lib/cart-context";
@@ -18,6 +19,11 @@ import { useCart } from "@/lib/cart-context";
 export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   const { count, open } = useCart();
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  // /catalog has its own live-filtering search in the sidebar (combines with
+  // brand/price/strength facets) — showing this one too would be two search
+  // boxes doing the same job on one screen, out of sync with each other
+  // (UI/UX audit, 2026-09-17). Everywhere else this is the only way in.
+  const isCatalogPage = usePathname().startsWith("/catalog");
 
   return (
     <header className="sticky top-0 z-40">
@@ -44,33 +50,37 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
             </Link>
           </nav>
 
-          <form
-            action="/catalog"
-            className="hidden min-w-0 flex-1 items-center gap-2 rounded-sm border border-border bg-surface-sunken px-4 py-2.5 transition-colors duration-150 ease-standard focus-within:border-border-strong hover:border-border-strong lg:flex"
-          >
-            <Search className="size-4 shrink-0 text-foreground-muted" aria-hidden="true" />
-            <input
-              type="text"
-              name="q"
-              placeholder="Поиск по каталогу"
-              aria-label="Поиск по каталогу"
-              className="w-full min-w-0 bg-transparent font-body text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
-            />
-            <button type="submit" className="sr-only">
-              Найти
-            </button>
-          </form>
+          {!isCatalogPage && (
+            <form
+              action="/catalog"
+              className="hidden min-w-0 flex-1 items-center gap-2 rounded-sm border border-border bg-surface-sunken px-4 py-2.5 transition-colors duration-150 ease-standard focus-within:border-border-strong hover:border-border-strong lg:flex"
+            >
+              <Search className="size-4 shrink-0 text-foreground-muted" aria-hidden="true" />
+              <input
+                type="text"
+                name="q"
+                placeholder="Поиск по каталогу"
+                aria-label="Поиск по каталогу"
+                className="w-full min-w-0 bg-transparent font-body text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
+              />
+              <button type="submit" className="sr-only">
+                Найти
+              </button>
+            </form>
+          )}
 
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
-            <Tooltip label="Поиск по каталогу">
-              <Link
-                href="/catalog"
-                aria-label="Поиск по каталогу"
-                className="flex size-11 items-center justify-center rounded-sm text-foreground-secondary transition-colors duration-150 ease-standard hover:bg-surface-sunken hover:text-foreground lg:hidden"
-              >
-                <Search className="size-[18px]" aria-hidden="true" />
-              </Link>
-            </Tooltip>
+            {!isCatalogPage && (
+              <Tooltip label="Поиск по каталогу">
+                <Link
+                  href="/catalog"
+                  aria-label="Поиск по каталогу"
+                  className="flex size-11 items-center justify-center rounded-sm text-foreground-secondary transition-colors duration-150 ease-standard hover:bg-surface-sunken hover:text-foreground lg:hidden"
+                >
+                  <Search className="size-[18px]" aria-hidden="true" />
+                </Link>
+              </Tooltip>
+            )}
             {whatsappNumber && (
               <Tooltip label="Написать в WhatsApp">
                 <a
