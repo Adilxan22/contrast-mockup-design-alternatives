@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getBranchAvailability, getProductById } from "@/lib/catalog";
 import { hasDatabase, prisma } from "@/lib/db";
 import { parsePrice } from "@/lib/format";
+import { normalizePhone } from "@/lib/phone";
 import { isPosterConfigured } from "@/lib/poster/client";
 import { createIncomingOrder } from "@/lib/poster/api";
 import { sendOrderNotification } from "@/lib/whatsapp";
@@ -59,6 +60,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_input", details: parsed.error.flatten() }, { status: 400 });
   }
   const input = parsed.data;
+  // Canonical digits-only form — matches what /account's session lookup and
+  // Poster's own client search use, so an order placed here is findable by
+  // the same customer later regardless of how they typed the phone in each
+  // form (spaces/+7/leading-8 all normalize the same way, see lib/phone.ts).
+  const phone = normalizePhone(input.phone);
 
   if (input.deliveryType === "delivery" && !input.address) {
     return NextResponse.json({ error: "address_required" }, { status: 400 });
@@ -102,7 +108,7 @@ export async function POST(req: Request) {
         data: {
           branch: input.branch,
           customerName: input.customerName,
-          customerPhone: input.phone,
+          customerPhone: phone,
           items: orderItemsJson,
           deliveryType: input.deliveryType,
           address: input.address,
@@ -114,7 +120,7 @@ export async function POST(req: Request) {
 
   if (hasDatabase) {
     await prisma.consent.create({
-      data: { phone: input.phone, textVersion: CONSENT_TEXT_VERSION },
+      data: { phone, textVersion: CONSENT_TEXT_VERSION },
     });
   }
 
@@ -136,7 +142,7 @@ export async function POST(req: Request) {
     try {
       const result = await createIncomingOrder({
         branch: input.branch,
-        phone: input.phone,
+        phone,
         customerName: input.customerName,
         comment: input.comment,
         items: items.map((it) => ({
@@ -162,7 +168,7 @@ export async function POST(req: Request) {
     branch: input.branch,
     orderId: order?.id ?? 0,
     customerName: input.customerName,
-    customerPhone: input.phone,
+    customerPhone: phone,
     totalTenge,
     itemsSummary,
   });

@@ -30,6 +30,9 @@ export default async function AdminCatalogPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="font-display text-2xl text-foreground">Каталог — ручная доразметка</h1>
         <div className="flex items-center gap-4">
+          <Link href="/admin/products" className="font-body text-sm text-foreground-secondary hover:text-foreground">
+            Фото товаров
+          </Link>
           <Link href="/admin/hero-slides" className="font-body text-sm text-foreground-secondary hover:text-foreground">
             Слайды на главной
           </Link>

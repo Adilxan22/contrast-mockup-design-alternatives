@@ -39,6 +39,21 @@ export async function updateProductAttributes(
   revalidatePath("/catalog");
 }
 
+export async function setProductImage(productId: number, imageUrl: string): Promise<void> {
+  if (!(await requireAdmin())) redirect("/admin/login");
+  if (!hasDatabase) return;
+
+  await prisma.product.update({
+    where: { id: productId },
+    // Tagged "manual" so a later Poster catalog sync never overwrites it —
+    // see the schema comment on Product.imageSource.
+    data: { imageUrl: imageUrl.trim() || null, imageSource: "manual" },
+  });
+  revalidatePath("/admin/products");
+  revalidatePath("/catalog");
+  revalidatePath("/product/[id]", "page");
+}
+
 export async function createHeroSlide(formData: FormData): Promise<{ error?: string }> {
   if (!(await requireAdmin())) redirect("/admin/login");
   if (!hasDatabase) return { error: "database_not_configured" };

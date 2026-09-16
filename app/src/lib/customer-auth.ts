@@ -1,6 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { hasDatabase, prisma } from "./db";
+import { normalizePhone } from "./phone";
 import { sign, verify } from "./signed-token";
 
 // Personal cabinet auth, matching docs/ARCHITECTURE.md §3: phone number is the
@@ -36,11 +37,6 @@ class DevNoOpOtpProvider implements OtpProvider {
 }
 
 export const otpProvider: OtpProvider = new DevNoOpOtpProvider();
-
-function normalizePhone(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  return digits.startsWith("8") ? `7${digits.slice(1)}` : digits;
-}
 
 /** Called after the customer submits the phone (and, once real OTP lands, the code). */
 export async function createCustomerSession(rawPhone: string): Promise<string> {

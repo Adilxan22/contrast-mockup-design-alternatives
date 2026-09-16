@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createHeroSlide, deleteHeroSlide, toggleHeroSlideActive } from "@/app/admin/actions";
+import { deleteHeroSlide, toggleHeroSlideActive } from "@/app/admin/actions";
+import { HeroSlideForm } from "@/components/admin/HeroSlideForm";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { Input } from "@/components/ui/Input";
 import { requireAdmin } from "@/lib/admin-auth";
 import { hasDatabase, prisma } from "@/lib/db";
 
@@ -14,32 +14,24 @@ export default async function AdminHeroSlidesPage() {
 
   return (
     <Container className="max-w-2xl py-8">
-      <Link href="/admin/catalog" className="mb-4 inline-block font-body text-sm text-foreground-secondary hover:text-foreground">
-        ← Каталог
-      </Link>
+      <div className="mb-4 flex items-center justify-between">
+        <Link href="/admin/catalog" className="font-body text-sm text-foreground-secondary hover:text-foreground">
+          ← Каталог
+        </Link>
+        <Link href="/admin/products" className="font-body text-sm text-foreground-secondary hover:text-foreground">
+          Фото товаров
+        </Link>
+      </div>
       <h1 className="mb-2 font-display text-2xl text-foreground">Слайды на главной</h1>
       <p className="mb-6 font-body text-sm text-foreground-muted">
         Промо-баннеры (акции, новости) на главной странице — картинка + ссылка, куда ведёт клик.
-        Вставляй прямую ссылку на картинку (не страницу) — загрузки файлов пока нет, только по URL.
       </p>
 
       {!hasDatabase ? (
         <p className="font-body text-foreground-muted">DATABASE_URL не настроен — недоступно.</p>
       ) : (
         <>
-          <form
-            action={async (formData) => {
-              "use server";
-              await createHeroSlide(formData);
-            }}
-            className="mb-8 flex flex-col gap-4 rounded-md border border-border p-5"
-          >
-            <Input name="imageUrl" label="Ссылка на картинку" placeholder="https://..." required />
-            <Input name="linkUrl" label="Куда ведёт клик" placeholder="/catalog?category=..." required />
-            <Button type="submit" variant="primary">
-              Добавить слайд
-            </Button>
-          </form>
+          <HeroSlideForm />
 
           {slides.length === 0 ? (
             <p className="font-body text-foreground-muted">Слайдов пока нет.</p>

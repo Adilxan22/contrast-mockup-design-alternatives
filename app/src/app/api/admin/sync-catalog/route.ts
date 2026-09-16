@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
+import { isCronAuthenticated } from "@/lib/cron-auth";
 import { hasDatabase, prisma } from "@/lib/db";
 import {
   getCategories,
   getProducts,
   normalizedPrice,
+  posterPhotoUrl,
   resolveTopLevelCategory,
   type PosterCategory,
   type PosterProduct,
@@ -25,7 +27,7 @@ async function upsertProduct(
   p: PosterProduct,
   categoriesById: Map<string, PosterCategory>,
   dbCategoryByPosterId: Map<number, { id: number }>,
-  existingByPosterId: Map<number, { needsManualReview: boolean }>
+  existingByPosterId: Map<number, { needsManualReview: boolean; imageSource: string | null }>
 ): Promise<"created" | "updated" | { flagged: boolean }> {
   const leafCategoryName = p.category_name ?? "";
   const { brand, packaging, flavor, strength, needsManualReview } = parseProductAttributes(
@@ -37,12 +39,17 @@ async function upsertProduct(
   const dbCategory = topCategory ? dbCategoryByPosterId.get(Number(topCategory.category_id)) : undefined;
   const categoryLabel = (topCategory?.category_name ?? leafCategoryName).trim();
   const productName = p.product_name.trim();
+  const photoUrl = posterPhotoUrl(p);
 
   const existing = existingByPosterId.get(Number(p.product_id));
   // A row an admin already fixed (needsManualReview cleared to false) keeps
   // its manual brand/flavor/strength/packaging on re-sync — only rows still
   // flagged get overwritten with a fresh parse.
   const keepManualFix = existing && !existing.needsManualReview;
+  // A photo uploaded through /admin/products or hero-slides is tagged
+  // "manual" and must never be silently replaced by a Poster sync — only
+  // rows Poster itself last touched (or that have no photo yet) get updated.
+  const keepManualImage = existing?.imageSource === "manual";
 
   await prisma.product.upsert({
     where: { posterId: Number(p.product_id) },
@@ -59,6 +66,7 @@ async function upsertProduct(
       strength,
       needsManualReview,
       active: p.hidden !== "1",
+      ...(photoUrl ? { imageUrl: photoUrl, imageSource: "poster" } : {}),
     },
     update: {
       ingredientId: p.ingredient_id ? Number(p.ingredient_id) : null,
@@ -68,16 +76,14 @@ async function upsertProduct(
       priceTenge: normalizedPrice(p),
       ...(keepManualFix ? {} : { brand, packaging, flavor, strength, needsManualReview }),
       active: p.hidden !== "1",
+      ...(!keepManualImage && photoUrl ? { imageUrl: photoUrl, imageSource: "poster" } : {}),
     },
   });
 
   return existing ? "updated" : "created";
 }
 
-export async function POST() {
-  if (!(await requireAdmin())) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+async function runSync(): Promise<NextResponse> {
   if (!hasDatabase) {
     return NextResponse.json({ error: "database_not_configured" }, { status: 400 });
   }
@@ -100,10 +106,9 @@ export async function POST() {
     }
     const dbCategoryByPosterId = new Map((await prisma.category.findMany()).map((c) => [c.posterId, c]));
     const existingByPosterId = new Map(
-      (await prisma.product.findMany({ select: { posterId: true, needsManualReview: true } })).map((p) => [
-        p.posterId,
-        p,
-      ])
+      (
+        await prisma.product.findMany({ select: { posterId: true, needsManualReview: true, imageSource: true } })
+      ).map((p) => [p.posterId, p])
     );
 
     let created = 0;
@@ -138,4 +143,20 @@ export async function POST() {
     console.error("[sync-catalog] failed:", err);
     return NextResponse.json({ error: "sync_failed" }, { status: 500 });
   }
+}
+
+/** Manual trigger from the admin "Синхронизировать каталог" button. */
+export async function POST() {
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  return runSync();
+}
+
+/** Scheduled trigger — see vercel.json's crons entry for this path. */
+export async function GET(req: Request) {
+  if (!isCronAuthenticated(req)) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  return runSync();
 }

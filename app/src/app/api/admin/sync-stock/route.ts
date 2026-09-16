@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
+import { isCronAuthenticated } from "@/lib/cron-auth";
 import { hasDatabase, prisma } from "@/lib/db";
 import { getAllBranchData } from "@/lib/poster/api";
 import { PosterConfigError } from "@/lib/poster/client";
@@ -33,10 +34,7 @@ async function runBatched<T>(items: T[], worker: (item: T) => Promise<boolean>):
   return matched;
 }
 
-export async function POST() {
-  if (!(await requireAdmin())) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+async function runSync(): Promise<NextResponse> {
   if (!hasDatabase) {
     return NextResponse.json({ error: "database_not_configured" }, { status: 400 });
   }
@@ -93,4 +91,20 @@ export async function POST() {
     console.error("[sync-stock] failed:", err);
     return NextResponse.json({ error: "sync_failed" }, { status: 500 });
   }
+}
+
+/** Manual trigger from the admin "Синхронизировать остатки" button. */
+export async function POST() {
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  return runSync();
+}
+
+/** Scheduled trigger — see vercel.json's crons entry for this path. */
+export async function GET(req: Request) {
+  if (!isCronAuthenticated(req)) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  return runSync();
 }

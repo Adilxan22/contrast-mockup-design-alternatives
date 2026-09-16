@@ -46,6 +46,14 @@ model Product {
   packaging         String?
   needsManualReview Boolean  @default(false)
   imageUrl          String?
+  // Who set imageUrl last — "poster" (synced from the connect account's own
+  // product photo) vs "manual" (uploaded through /admin/products or the hero
+  // -slides admin, including this project's earlier hand/agent-sourced
+  // photos, backfilled to "manual" once on migration). sync-catalog only
+  // ever overwrites a "poster"/null row, never "manual" — otherwise a photo
+  // an admin uploaded on the site would get silently replaced on the next
+  // Poster sync.
+  imageSource       String?
   active            Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

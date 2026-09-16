@@ -1,0 +1,26 @@
+name: Sync stock from Poster
+
+# Keeps BranchStock fresh during the business day — the site's own checkout
+# reads cached stock (not a live Poster call), so this is what keeps "out of
+# stock" checks accurate. Vercel's free plan only allows daily Cron Jobs, so
+# this lives here instead for a tighter interval. The catalog itself (names/
+# prices/photos) changes rarely and stays on Vercel's own nightly cron.
+on:
+  schedule:
+    - cron: "*/20 2-16 * * *" # every 20 min, 07:00-21:00 Almaty (UTC+5)
+  workflow_dispatch: {} # manual "Run workflow" button, for testing
+
+jobs:
+  sync-stock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call sync-stock endpoint
+        run: |
+          status=$(curl -s -o /tmp/body.json -w "%{http_code}" \
+            -X GET "https://hookahmarket.vercel.app/api/admin/sync-stock" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          echo "HTTP $status"
+          cat /tmp/body.json
+          if [ "$status" -ge 300 ]; then
+            exit 1
+          fi

@@ -1,4 +1,5 @@
 import "server-only";
+import { normalizePhone } from "@/lib/phone";
 import { BRANCH_ACCOUNTS, getPosterToken, type PosterAccount, posterFetch } from "./client";
 
 // Field shapes below were corrected against a real response from the
@@ -40,6 +41,7 @@ export interface PosterStorageLeftover {
 export interface PosterClient {
   client_id: string;
   phone?: string;
+  phone_number?: string; // digits-only form of `phone`, e.g. "77018880757" — more reliable to compare than parsing `phone`
   bonus?: string; // tiyn
   firstname?: string;
   lastname?: string;
@@ -66,6 +68,20 @@ export async function getCategories(account: PosterAccount = "connect"): Promise
 
 export async function getProducts(account: PosterAccount = "connect"): Promise<PosterProduct[]> {
   return posterFetch<PosterProduct[]>(account, "menu.getProducts");
+}
+
+/**
+ * `photo`/`photo_origin` on a product come back as a path relative to
+ * Poster's own CDN (e.g. "/upload/pos_cdb_48758/menu/product_123_456.jpg"),
+ * not a full URL — confirmed against real data: a meaningful chunk of the
+ * catalog (this account had ~1450/3696 products) already has a real photo
+ * uploaded directly in Poster, covering several brands no external source
+ * had. `photo_origin` is the uncompressed original; `photo` is Poster's own
+ * resized version — either resolves fine, `photo` is smaller so preferred.
+ */
+export function posterPhotoUrl(product: PosterProduct): string | null {
+  const path = product.photo || product.photo_origin;
+  return path ? `https://joinposter.com${path}` : null;
 }
 
 export function normalizedPrice(product: PosterProduct): number {
@@ -159,7 +175,19 @@ export async function createIncomingOrder(input: CreateIncomingOrderInput): Prom
   });
 }
 
+/**
+ * Two real quirks in Poster's own phone search (confirmed against real
+ * client data): it doesn't understand a leading "8" trunk prefix (searching
+ * "8 701 888 0757" returns nothing, even though the client's real number is
+ * "+7 701 888 0757") and it does a loose/substring match rather than an
+ * exact one (a bare 10-digit number with no country code still returns a
+ * client whose full number merely ends with those digits). So we send
+ * Poster our own normalized digits — which it does handle — rather than
+ * whatever the customer typed, and then only trust a result whose own phone
+ * normalizes to exactly that.
+ */
 export async function getClientByPhone(phone: string, account: PosterAccount = "connect"): Promise<PosterClient | null> {
-  const clients = await posterFetch<PosterClient[]>(account, "clients.getClients", { params: { phone } });
-  return clients[0] ?? null;
+  const normalized = normalizePhone(phone);
+  const clients = await posterFetch<PosterClient[]>(account, "clients.getClients", { params: { phone: normalized } });
+  return clients.find((c) => (c.phone_number ?? (c.phone && normalizePhone(c.phone))) === normalized) ?? null;
 }
