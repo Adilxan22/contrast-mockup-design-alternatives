@@ -42,7 +42,9 @@ async function runSync(): Promise<NextResponse> {
 
   try {
     const { byBranch, skipped } = await getAllBranchData();
-    const productsByName = new Map((await prisma.product.findMany()).map((p) => [normalizeName(p.name), p]));
+    const productsByName = new Map(
+      (await prisma.product.findMany({ select: { id: true, name: true } })).map((p) => [normalizeName(p.name), p]),
+    );
 
     let stockRowsWritten = 0;
     let stockTotal = 0;
